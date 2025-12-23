@@ -1,12 +1,24 @@
-import "./global.css"
-import { Text, View } from "react-native";
- 
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
+import { StatusBar } from 'react-native';
+import './global.css';
+import { store } from './src/store/store';
+import AppNavigator from './src/navigation';
+import { ThemeProvider } from './src/context/ThemeContext';
+
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind!
-      </Text>
-    </View>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <NavigationContainer>
+            <StatusBar/>
+            <AppNavigator />
+          </NavigationContainer>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </Provider>
   );
 }

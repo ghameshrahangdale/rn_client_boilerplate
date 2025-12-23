@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "533489391926",
+    "project_id": "client-ready-f744e",
+    "storage_bucket": "client-ready-f744e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533489391926:android:60f7fa438107caf7863b97",
+        "android_client_info": {
+          "package_name": "com.rn_client_boilerplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMiP_2eCVdApRmLhnvZykQlFNU7W7lMQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
