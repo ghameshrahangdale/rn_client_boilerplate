@@ -31,13 +31,13 @@ const SplashScreen: React.FC = () => {
           className="w-32 h-32 rounded-full mb-8 justify-center items-center"
           style={{ backgroundColor: colors.primary }}
         >
-          <Text className="text-white text-4xl font-bold">LOGO</Text>
+          <Text className="text-white font-rubik-bold text-4xl">LOGO</Text>
         </View>
         
-        <Text className="text-3xl font-bold mb-2" style={{ color: colors.text }}>
+        <Text className="text-3xl font-rubik-semibold mb-2" style={{ color: colors.text }}>
           Welcome
         </Text>
-        <Text className="text-gray-600 text-lg">Loading your experience...</Text>
+        <Text className="text-gray-600 font-rubik text-lg">Loading your experience...</Text>
         
         {isLoading && (
           <View className="mt-8">

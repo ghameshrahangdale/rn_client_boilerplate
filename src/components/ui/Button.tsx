@@ -26,21 +26,21 @@ const Button: React.FC<ButtonProps> = ({
   const getButtonStyle = () => {
     switch (variant) {
       case 'secondary':
-        return 'bg-green-500'; // Use actual Tailwind class
+        return 'bg-green-500';
       case 'outline':
-        return 'border border-blue-500 bg-transparent'; // Use actual Tailwind class
+        return 'border border-blue-500 bg-transparent';
       case 'danger':
-        return 'bg-red-500'; // Use actual Tailwind class
+        return 'bg-red-500';
       case 'primary':
       default:
-        return 'bg-blue-500'; // Use actual Tailwind class
+        return 'bg-blue-500';
     }
   };
 
   const getTextStyle = () => {
     switch (variant) {
       case 'outline':
-        return 'text-blue-500'; // Use actual Tailwind class
+        return 'text-blue-500';
       default:
         return 'text-white';
     }
@@ -48,14 +48,15 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
-      className={`py-4 px-6 rounded-lg ${fullWidth ? 'w-full' : ''} ${getButtonStyle()} ${
+      className={`py-4 px-6 rounded-lg font-rubik ${
+        fullWidth ? 'w-full' : ''
+      } ${getButtonStyle()} ${
         disabled || loading ? 'opacity-50' : ''
       } ${className}`}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.8}
       style={{
-        // Apply dynamic colors using inline styles where needed
         ...(variant === 'secondary' && { backgroundColor: colors.secondary }),
         ...(variant === 'primary' && { backgroundColor: colors.primary }),
         ...(variant === 'danger' && { backgroundColor: colors.error }),
@@ -69,9 +70,8 @@ const Button: React.FC<ButtonProps> = ({
         <ActivityIndicator color={variant === 'outline' ? colors.primary : 'white'} />
       ) : (
         <Text 
-          className={`text-center font-bold text-lg ${getTextStyle()}`}
+          className={`text-center font-rubik-medium text-md ${getTextStyle()}`}
           style={{
-            // Apply dynamic text color for outline variant
             ...(variant === 'outline' && { color: colors.primary })
           }}
         >

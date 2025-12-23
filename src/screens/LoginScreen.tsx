@@ -83,7 +83,7 @@ const LoginScreen: React.FC = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white"
+      className="flex-1 bg-white font-rubik" // Added font-rubik here
     >
       <ScrollView 
         contentContainerStyle={{ flexGrow: 1 }}
@@ -91,10 +91,13 @@ const LoginScreen: React.FC = () => {
       >
         <View className="flex-1 px-6 justify-center">
           <View className="mb-10">
-            <Text className="text-3xl font-bold mb-2" style={{ color: colors.text }}>
+            <Text 
+              className="text-3xl font-rubik-bold mb-2" // Changed to rubik-bold
+              style={{ color: colors.text }}
+            >
               Welcome Back
             </Text>
-            <Text className="text-gray-600">Sign in to continue</Text>
+            <Text className="text-gray-600 font-rubik">Sign in to continue</Text> {/* Added font-rubik */}
           </View>
 
           <Input
@@ -117,7 +120,7 @@ const LoginScreen: React.FC = () => {
           />
 
           <TouchableOpacity className="self-end mb-6">
-            <Text className="text-blue-500 font-medium">Forgot Password?</Text>
+            <Text className="text-blue-500 font-rubik-medium">Forgot Password?</Text> {/* Changed to rubik-medium */}
           </TouchableOpacity>
 
           <Button
@@ -137,15 +140,15 @@ const LoginScreen: React.FC = () => {
           />
 
           <View className="flex-row justify-center mt-8">
-            <Text className="text-gray-600">Don't have an account? </Text>
+            <Text className="text-gray-600 font-rubik">Don't have an account? </Text> {/* Added font-rubik */}
             <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-              <Text className="text-blue-500 font-bold">Sign Up</Text>
+              <Text className="text-blue-500 font-rubik-bold">Sign Up</Text> {/* Changed to rubik-bold */}
             </TouchableOpacity>
           </View>
 
           {error && (
             <View className="mt-4 p-3 bg-red-50 rounded-lg">
-              <Text className="text-red-600 text-center">{error}</Text>
+              <Text className="text-red-600 text-center font-rubik">{error}</Text> {/* Added font-rubik */}
             </View>
           )}
         </View>

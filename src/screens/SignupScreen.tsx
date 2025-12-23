@@ -64,7 +64,7 @@ const SignupScreen: React.FC = () => {
     
     try {
       await AuthService.signupWithEmail(email, password, displayName);
-      // Navigation will be handled by the navigation container
+      
     } catch (error: any) {
       Alert.alert('Signup Failed', error.message);
     }
@@ -77,7 +77,7 @@ const SignupScreen: React.FC = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white"
+      className="flex-1 bg-white font-rubik" // Added font-rubik
     >
       <ScrollView 
         contentContainerStyle={{ flexGrow: 1 }}
@@ -85,10 +85,13 @@ const SignupScreen: React.FC = () => {
       >
         <View className="flex-1 px-6 justify-center py-8">
           <View className="mb-8">
-            <Text className="text-3xl font-bold mb-2" style={{ color: colors.text }}>
+            <Text 
+              className="text-3xl font-rubik-bold mb-2" // Changed to rubik-bold
+              style={{ color: colors.text }}
+            >
               Create Account
             </Text>
-            <Text className="text-gray-600">Sign up to get started</Text>
+            <Text className="text-gray-600 font-rubik">Sign up to get started</Text> {/* Added font-rubik */}
           </View>
 
           <Input
@@ -134,19 +137,19 @@ const SignupScreen: React.FC = () => {
             loading={isLoading}
             fullWidth
             className="mt-4 mb-6"
-            variant = 'primary'
+            variant="primary"
           />
 
           <View className="flex-row justify-center mt-4">
-            <Text className="text-gray-600">Already have an account? </Text>
+            <Text className="text-gray-600 font-rubik">Already have an account? </Text> {/* Added font-rubik */}
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text className="text-blue-500 font-bold">Sign In</Text>
+              <Text className="text-blue-500 font-rubik-bold">Sign In</Text> {/* Changed to rubik-bold */}
             </TouchableOpacity>
           </View>
 
           {error && (
             <View className="mt-4 p-3 bg-red-50 rounded-lg">
-              <Text className="text-red-600 text-center">{error}</Text>
+              <Text className="text-red-600 text-center font-rubik">{error}</Text> {/* Added font-rubik */}
             </View>
           )}
         </View>
