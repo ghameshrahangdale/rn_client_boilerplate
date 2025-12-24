@@ -3,7 +3,8 @@ import { ThemeColors } from '../types';
 // Central theme configuration - easy to customize for different clients
 export const theme: ThemeColors = {
   // Primary brand color
-  primary: '#4F46E5',
+  // primary: '#4F46E5',
+  primary: '#000',
   
   // Secondary brand color
   secondary: '#10B981',

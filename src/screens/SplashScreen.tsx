@@ -35,13 +35,13 @@ const SplashScreen: React.FC = () => {
         </View>
         
         <Text className="text-3xl font-rubik-semibold mb-2" style={{ color: colors.text }}>
-          Welcome
+          Client Ready
         </Text>
-        <Text className="text-gray-600 font-rubik text-lg">Loading your experience...</Text>
+        <Text className="text-gray-600 font-rubik text-lg">Welcome to Client Ready App</Text>
         
         {isLoading && (
           <View className="mt-8">
-            <Text className="text-gray-500">Checking authentication...</Text>
+            <Text className="text-gray-500 font-rubik">Loading...</Text>
           </View>
         )}
       </View>

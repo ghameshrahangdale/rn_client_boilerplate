@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,17 +8,17 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthService } from '../services/auth';
 import { RootState } from '../store/store';
-import { setError } from '../store/slices/authSlice';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import Loader from '../components/ui/Loader';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
+import { configureGoogleSignIn, signInWithGoogle } from '../services/googleSignIn';
 
 type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -27,15 +27,19 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  
+
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
+
   const validateForm = () => {
     let isValid = true;
-    
+
     if (!email) {
       setEmailError('Email is required');
       isValid = false;
@@ -45,7 +49,7 @@ const LoginScreen: React.FC = () => {
     } else {
       setEmailError('');
     }
-    
+
     if (!password) {
       setPasswordError('Password is required');
       isValid = false;
@@ -55,105 +59,126 @@ const LoginScreen: React.FC = () => {
     } else {
       setPasswordError('');
     }
-    
+
     return isValid;
   };
 
   const handleLogin = async () => {
     if (!validateForm()) return;
-    
     try {
       await AuthService.loginWithEmail(email, password);
-      // Navigation will be handled by the navigation container based on auth state
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
   };
 
   const handleGoogleLogin = async () => {
-    // For Google Sign-In, you'll need to implement react-native-google-signin
-    // This is a placeholder for the implementation
-    Alert.alert('Info', 'Google Sign-In implementation required');
+    try {
+      const googleCredential = await signInWithGoogle();
+      await AuthService.signInWithGoogle(googleCredential);
+    } catch (error: any) {
+      Alert.alert('Google Sign-In Failed', error.message);
+    }
   };
 
-  if (isLoading) {
-    return <Loader fullScreen />;
-  }
-
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white font-rubik" // Added font-rubik here
+    <LinearGradient
+      colors={['#0F2027', '#203A43', '#2C5364']}
+      className="flex-1"
     >
-      <ScrollView 
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
       >
-        <View className="flex-1 px-6 justify-center">
-          <View className="mb-10">
-            <Text 
-              className="text-3xl font-rubik-bold mb-2" // Changed to rubik-bold
-              style={{ color: colors.text }}
-            >
-              Welcome Back
-            </Text>
-            <Text className="text-gray-600 font-rubik">Sign in to continue</Text> {/* Added font-rubik */}
-          </View>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="px-5">
+            {/* Card */}
+            <View className="bg-white rounded-3xl px-6 py-8 shadow-2xl">
+              <Text className="text-3xl font-rubik-bold text-gray-900 mb-2">
+                Welcome Back 👋
+              </Text>
+              <Text className="text-gray-500 font-rubik mb-6">
+                Login to continue
+              </Text>
 
-          <Input
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            error={emailError}
-          />
+              <Input
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                placeholder="you@example.com"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                error={emailError}
+              />
 
-          <Input
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter your password"
-            secureTextEntry
-            error={passwordError}
-          />
+              <Input
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                placeholder="••••••••"
+                secureTextEntry
+                error={passwordError}
+              />
 
-          <TouchableOpacity className="self-end mb-6">
-            <Text className="text-blue-500 font-rubik-medium">Forgot Password?</Text> {/* Changed to rubik-medium */}
-          </TouchableOpacity>
+              <TouchableOpacity className="self-end mb-6">
+                <Text className="text-blue-600 font-rubik-medium">
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
 
-          <Button
-            title="Sign In"
-            onPress={handleLogin}
-            loading={isLoading}
-            fullWidth
-            className="mb-4"
-          />
+              <Button
+                title="Sign In"
+                onPress={handleLogin}
+                loading={isLoading}
+                fullWidth
+                className="mb-5"
+              />
 
-          <Button
-            title="Sign In with Google"
-            onPress={handleGoogleLogin}
-            variant="outline"
-            fullWidth
-            className="mb-6"
-          />
+              {/* Divider */}
+              <View className="flex-row items-center my-4">
+                <View className="flex-1 h-px bg-gray-300" />
+                <Text className="mx-4 text-gray-400 font-rubik">OR</Text>
+                <View className="flex-1 h-px bg-gray-300" />
+              </View>
 
-          <View className="flex-row justify-center mt-8">
-            <Text className="text-gray-600 font-rubik">Don't have an account? </Text> {/* Added font-rubik */}
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-              <Text className="text-blue-500 font-rubik-bold">Sign Up</Text> {/* Changed to rubik-bold */}
-            </TouchableOpacity>
-          </View>
+              <Button
+                title="Continue with Google"
+                onPress={handleGoogleLogin}
+                loading={isLoading}
+                variant="outline"
+                fullWidth
+                className="mb-6"
+              />
 
-          {error && (
-            <View className="mt-4 p-3 bg-red-50 rounded-lg">
-              <Text className="text-red-600 text-center font-rubik">{error}</Text> {/* Added font-rubik */}
+              {/* Signup */}
+              <View className="flex-row justify-center">
+                <Text className="text-gray-600 font-rubik">
+                  Don’t have an account?
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Signup')}
+                >
+                  <Text className="text-blue-600 font-rubik-bold ml-1">
+                    Sign Up
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {error && (
+                <View className="mt-4 p-3 bg-red-50 rounded-xl">
+                  <Text className="text-red-600 text-center font-rubik">
+                    {error}
+                  </Text>
+                </View>
+              )}
             </View>
-          )}
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 };
 

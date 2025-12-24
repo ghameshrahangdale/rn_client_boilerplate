@@ -6,13 +6,13 @@ import {
   User as FirebaseUser,
   GoogleAuthProvider,
   signInWithCredential,
-  AuthCredential
+  AuthCredential,
+  OAuthCredential
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { store } from '../store/store';
 import { setUser, setError, setLoading } from '../store/slices/authSlice';
 import { User } from '../types';
-import { Alert } from 'react-native';
 
 // Convert Firebase user to our User type
 const mapFirebaseUser = (firebaseUser: FirebaseUser): User => ({
@@ -25,8 +25,6 @@ const mapFirebaseUser = (firebaseUser: FirebaseUser): User => ({
 });
 
 export const AuthService = {
-
-
   // Email/Password Login
   async loginWithEmail(email: string, password: string): Promise<void> {
     try {
@@ -84,7 +82,14 @@ export const AuthService = {
   // Logout
   async logout(): Promise<void> {
     try {
+      // Sign out from Firebase
       await signOut(auth);
+      
+      try {
+        // await GoogleSignin.signOut();
+      } catch (error) {
+        // Ignore Google sign out errors
+      }
       store.dispatch(setUser(null));
     } catch (error: any) {
       store.dispatch(setError(error.message));
@@ -108,6 +113,10 @@ export const AuthService = {
       'auth/weak-password': 'Password should be at least 6 characters',
       'auth/network-request-failed': 'Network error. Please check your connection',
       'auth/too-many-requests': 'Too many attempts. Please try again later',
+      'auth/account-exists-with-different-credential': 'Account already exists with different credentials',
+      'auth/popup-closed-by-user': 'Sign in cancelled',
+      'auth/cancelled-popup-request': 'Sign in cancelled',
+      'auth/popup-blocked': 'Popup blocked by browser',
     };
     
     return errorMessages[errorCode] || 'An error occurred. Please try again.';

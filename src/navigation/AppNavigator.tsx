@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { useTheme } from '../context/ThemeContext';
-import { Text } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 
 export type AppTabParamList = {
   Home: undefined;
@@ -19,30 +19,39 @@ const AppNavigator: React.FC = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName: string = 'circle';
+
           if (route.name === 'Home') {
-            iconName = focused ? '🏠' : '🏠';
+            iconName = focused ? 'home' : 'home';
           } else if (route.name === 'Profile') {
-            iconName = focused ? '👤' : '👤';
+            iconName = focused ? 'user' : 'user';
           }
-          return <Text style={{ fontSize: size }}>{iconName}</Text>;
+
+          return <Feather name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: '#9CA3AF',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'white',
+          backgroundColor: '#FFFFFF',
           borderTopColor: '#E5E7EB',
+          height: 62,
+          paddingBottom: 6,
+          paddingTop: 6,
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'Rubik-Medium',
+          fontSize: 12,
         },
       })}
     >
-      <Tab.Screen 
-        name="Home" 
+      <Tab.Screen
+        name="Home"
         component={HomeScreen}
         options={{ title: 'Home' }}
       />
-      <Tab.Screen 
-        name="Profile" 
+      <Tab.Screen
+        name="Profile"
         component={ProfileScreen}
         options={{ title: 'Profile' }}
       />
