@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Share,
+  Platform,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
@@ -14,6 +16,9 @@ import { auth } from '../config/firebase';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import Header from '../components/ui/Header';
+import { getVersion, getApplicationName } from 'react-native-device-info'; 
+import { package as packageName } from '../../app.json';
+import Avatar from '../components/ui/Avatar';
 
 const MenuScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -21,6 +26,20 @@ const MenuScreen: React.FC = () => {
 const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
   
   const { colors } = useTheme();
+
+  const handleShareApp = async () => {
+  try {
+    const appName = getApplicationName();
+    const message =
+      Platform.OS === 'android'
+        ? `Check out ${appName} on Google Play Store: https://play.google.com/store/apps/details?id=rn_boilerplate`
+        : `Check out ${appName} on App Store: https://apps.apple.com/app/id`;
+    await Share.share({ message });
+  } catch (error) {
+    Alert.alert('Error', 'Unable to share the app.');
+  }
+};
+
 
   const handleLogout = async () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
@@ -47,16 +66,10 @@ const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
         {/* Profile Card */}
         <View className="bg-white mx-4 mt-6 p-5 rounded-2xl shadow-sm flex-row items-center">
           {/* Avatar */}
-          <View
-            className="w-14 h-14 rounded-full items-center justify-center"
-            style={{ backgroundColor: colors.primary }}
-          >
-            <Text className="text-white text-xl font-rubik-bold">
-              {user?.displayName?.charAt(0) ||
-                user?.email?.charAt(0) ||
-                'U'}
-            </Text>
-          </View>
+          <Avatar
+            imageUrl={photoURL || user?.photoURL || undefined}
+            size="xl"
+          />
 
           {/* User Info */}
           <View className="ml-4 flex-1">
@@ -81,16 +94,20 @@ const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
             icon="info"
             label="App Info"
             color={colors.primary}
+            onPress={() => navigation.navigate('AppInfo' as never)}
+            
           />
           <MenuItem
             icon="share-2"
             label="Share App"
             color={colors.primary}
+            onPress={handleShareApp}
           />
           <MenuItem
             icon="help-circle"
             label="Help & Support"
             color={colors.primary}
+
           />
         </View>
 

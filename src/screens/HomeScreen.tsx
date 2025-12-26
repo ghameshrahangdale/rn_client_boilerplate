@@ -1,93 +1,135 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
-import { AuthService } from '../services/auth';
 import { RootState } from '../store/store';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
 import Feather from 'react-native-vector-icons/Feather';
-import {name as clientName} from '../../app.json';
+import { name as clientName } from '../../app.json';
 import Logo from '../components/common/Logo';
 import Avatar from '../components/ui/Avatar';
+import { AuthService } from '../services/auth';
 
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
-    const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
-  
+  const [photoURL] = useState(user?.photoURL || '');
+
+  const surface = '#FFFFFF';
+  const textSecondary = '#6B7280';
+
+  const firstName = user?.displayName?.split(' ')[0];
 
   const handleLogout = async () => {
     await AuthService.logout();
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 32 }}
+      className="flex-1 bg-gray-50"
+    >
       {/* Header */}
-      <View className="bg-white px-6 py-4 flex-row items-center justify-between shadow-sm">
-   
-        {/* Logo + App Name */}
+      <View
+        className="px-6 pt-6 pb-4 flex-row items-center justify-between shadow-sm"
+        style={{ backgroundColor: surface }}
+      >
         <View className="flex-row items-center">
-          <Logo size='md'/>
-          <Text className="text-xl ml-2 font-rubik-bold text-gray-900">
+          <Logo size="md" />
+          <Text
+            className="ml-2 text-xl font-rubik-bold"
+            style={{ color: colors.text }}
+          >
             {clientName}
           </Text>
         </View>
 
-        {/* Profile Icon */}
-        <Avatar
-            imageUrl={photoURL || user?.photoURL || undefined}
-          />
+        <Avatar imageUrl={photoURL || undefined} size="md" />
       </View>
 
-      <View className="p-6">
+      {/* Content */}
+      <View className="px-6 mt-6">
         {/* Welcome */}
-        <View className="mb-6">
-          <Text className="text-2xl font-rubik-bold text-gray-900">
-            Welcome{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''} 👋
+        <View className="mb-8">
+          <Text
+            className="text-2xl font-rubik-bold"
+            style={{ color: colors.text }}
+          >
+            Welcome{firstName ? `, ${firstName}` : ''} 👋
           </Text>
-          <Text className="text-gray-600 font-rubik mt-1">
+          <Text
+            className="mt-1 font-rubik"
+            style={{ color: textSecondary }}
+          >
             {user?.email}
           </Text>
         </View>
 
-        {/* App Ready Card */}
-        <View className="bg-white p-6 rounded-2xl shadow-sm mb-6">
-          <Text className="text-xl font-rubik-bold text-gray-900 mb-2">
-            🚀 Your App Is Ready
+        {/* Highlight Card */}
+        <View
+          className="rounded-2xl p-6 mb-8"
+          style={{
+            backgroundColor: colors.primary + '12',
+          }}
+        >
+          <Text
+            className="text-lg font-rubik-bold mb-2"
+            style={{ color: colors.primary }}
+          >
+            🚀 App Setup Complete
           </Text>
-          <Text className="text-gray-600 font-rubik leading-relaxed">
-            This application is fully set up and ready for your client.
-            Authentication, user management, and core structure are already in place.
-            You can now start integrating business-specific features.
+          <Text
+            className="font-rubik leading-relaxed"
+            style={{ color: colors.text }}
+          >
+            This boilerplate is production-ready with authentication,
+            profile management, and a scalable architecture. You can now
+            focus entirely on business features.
           </Text>
         </View>
 
-        {/* Features Section */}
-        <View className="mb-6">
-          <Text className="text-lg font-rubik-bold text-gray-900 mb-4">
-            Available Modules
+        {/* Core Modules */}
+        <View className="mb-8">
+          <Text
+            className="text-lg font-rubik-bold mb-4"
+            style={{ color: colors.text }}
+          >
+            Core Modules
           </Text>
 
           <View className="flex-row flex-wrap justify-between">
             {[
               { icon: 'shield', title: 'Secure Auth' },
-              { icon: 'user-check', title: 'User Profiles' },
-              { icon: 'settings', title: 'App Settings' },
+              { icon: 'user', title: 'User Profile' },
+              { icon: 'settings', title: 'Config Ready' },
               { icon: 'layers', title: 'Scalable Base' },
             ].map((item, index) => (
               <View
                 key={index}
-                className="w-[48%] bg-white rounded-xl p-4 mb-4 shadow-sm"
+                className="w-[48%] rounded-xl p-4 mb-4"
+                style={{
+                  backgroundColor: surface,
+                  shadowColor: '#000',
+                  shadowOpacity: 0.05,
+                  shadowRadius: 8,
+                  elevation: 2,
+                }}
               >
                 <Feather
                   name={item.icon as any}
                   size={22}
-                  color="#2563EB"
+                  color={colors.primary}
                 />
-                <Text className="mt-3 text-gray-900 font-rubik-bold">
+                <Text
+                  className="mt-3 font-rubik-bold"
+                  style={{ color: colors.text }}
+                >
                   {item.title}
                 </Text>
-                <Text className="text-gray-500 font-rubik text-sm mt-1">
+                <Text
+                  className="text-sm mt-1 font-rubik"
+                  style={{ color: textSecondary }}
+                >
                   Ready to extend
                 </Text>
               </View>
@@ -95,56 +137,38 @@ const HomeScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Account Info */}
-        <View className="bg-white p-6 rounded-2xl shadow-sm mb-6">
-          <Text className="text-lg font-rubik-bold text-gray-900 mb-4">
-            Account Information
+        {/* Account Status */}
+        <View
+          className="rounded-2xl p-6 mb-8"
+          style={{ backgroundColor: surface }}
+        >
+          <Text
+            className="text-lg font-rubik-bold mb-4"
+            style={{ color: colors.text }}
+          >
+            Account Status
           </Text>
 
-          <View className="space-y-4">
-            {user?.displayName && (
-              <View>
-                <Text className="text-gray-500 font-rubik-medium">
-                  Name
-                </Text>
-                <Text className="text-gray-800 font-rubik text-lg">
-                  {user.displayName}
-                </Text>
-              </View>
-            )}
-
-            {user?.email && (
-              <View>
-                <Text className="text-gray-500 font-rubik-medium">
-                  Email
-                </Text>
-                <Text className="text-gray-800 font-rubik text-lg">
-                  {user.email}
-                </Text>
-              </View>
-            )}
-
-            <View>
-              <Text className="text-gray-500 font-rubik-medium">
-                Status
-              </Text>
-              <View className="flex-row items-center mt-1">
-                <View className="w-2.5 h-2.5 rounded-full bg-green-500 mr-2" />
-                <Text className="text-green-700 font-rubik-medium">
-                  Active
-                </Text>
-              </View>
-            </View>
+          <View className="flex-row items-center">
+            <View
+              className="w-2.5 h-2.5 rounded-full mr-2"
+              style={{ backgroundColor: colors.success }}
+            />
+            <Text
+              className="font-rubik-medium"
+              style={{ color: colors.success }}
+            >
+              Active
+            </Text>
           </View>
         </View>
 
         {/* Logout */}
         <Button
           title="Logout"
-          onPress={handleLogout}
           variant="outline"
           fullWidth
-          className="mt-4"
+          onPress={handleLogout}
         />
       </View>
     </ScrollView>

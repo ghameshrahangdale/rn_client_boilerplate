@@ -69,11 +69,7 @@ const ProfileScreen: React.FC = () => {
       <ScrollView contentContainerStyle={{ padding: 24 }}>
         {/* Avatar */}
         <View className="items-center mb-8">
-          <Avatar
-            name={displayName}
-            imageUrl={photoURL || user.photoURL || undefined}
-            size="3xl"
-          />
+          
 
           {!isEditing && (
             <TouchableOpacity onPress={() => setIsEditing(true)}>
