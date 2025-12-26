@@ -13,6 +13,7 @@ import { auth } from '../config/firebase';
 import { store } from '../store/store';
 import { setUser, setError, setLoading } from '../store/slices/authSlice';
 import { User } from '../types';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 // Convert Firebase user to our User type
 const mapFirebaseUser = (firebaseUser: FirebaseUser): User => ({
@@ -26,14 +27,24 @@ const mapFirebaseUser = (firebaseUser: FirebaseUser): User => ({
 
 export const AuthService = {
   // Email/Password Login
-  async loginWithEmail(email: string, password: string): Promise<void> {
+ async loginWithEmail(email: string, password: string): Promise<void> {
     try {
       store.dispatch(setLoading(true));
+      store.dispatch(setError('')); // Clear previous errors
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = mapFirebaseUser(userCredential.user);
       store.dispatch(setUser(user));
     } catch (error: any) {
-      const errorMessage = this.getErrorMessage(error.code);
+      console.log('Firebase login error raw:', JSON.stringify(error, null, 2));
+      const errorCode =
+  typeof error?.code === 'string'
+    ? error.code
+    : typeof error?.message === 'string'
+    ? error.message
+    : 'unknown-error';
+
+const errorMessage = this.getErrorMessage(errorCode);
+
       store.dispatch(setError(errorMessage));
       throw new Error(errorMessage);
     } finally {
@@ -41,43 +52,68 @@ export const AuthService = {
     }
   },
 
-  // Email/Password Signup
-  async signupWithEmail(email: string, password: string, displayName: string): Promise<void> {
-    try {
-      store.dispatch(setLoading(true));
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Update profile with display name
-      await updateProfile(userCredential.user, {
-        displayName,
-      });
+  // Email/Password Signup (NO AUTO LOGIN)
+async signupWithEmail(
+  email: string,
+  password: string,
+  displayName: string
+): Promise<void> {
+  try {
+    store.dispatch(setLoading(true));
+    store.dispatch(setError(null));
 
-      const user = mapFirebaseUser(userCredential.user);
-      store.dispatch(setUser(user));
-    } catch (error: any) {
-      const errorMessage = this.getErrorMessage(error.code);
-      store.dispatch(setError(errorMessage));
-      throw new Error(errorMessage);
-    } finally {
-      store.dispatch(setLoading(false));
-    }
-  },
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    await updateProfile(userCredential.user, { displayName });
+
+    await signOut(auth);
+  } catch (error: any) {
+    const errorCode =
+      typeof error?.code === 'string'
+        ? error.code
+        : typeof error?.message === 'string'
+        ? error.message
+        : 'unknown-error';
+
+    const errorMessage = this.getErrorMessage(errorCode);
+    store.dispatch(setError(errorMessage));
+
+    return;
+  } finally {
+    store.dispatch(setLoading(false));
+  }
+}
+,
 
   // Google Sign-In
   async signInWithGoogle(credential: AuthCredential): Promise<void> {
-    try {
-      store.dispatch(setLoading(true));
-      const userCredential = await signInWithCredential(auth, credential);
-      const user = mapFirebaseUser(userCredential.user);
-      store.dispatch(setUser(user));
-    } catch (error: any) {
-      const errorMessage = this.getErrorMessage(error.code);
-      store.dispatch(setError(errorMessage));
-      throw new Error(errorMessage);
-    } finally {
-      store.dispatch(setLoading(false));
-    }
-  },
+  try {
+    store.dispatch(setLoading(true));
+
+    const userCredential = await signInWithCredential(auth, credential);
+    const user = mapFirebaseUser(userCredential.user);
+    store.dispatch(setUser(user));
+  } catch (error: any) {
+    const errorCode =
+      typeof error?.code === 'string'
+        ? error.code
+        : typeof error?.message === 'string'
+        ? error.message
+        : 'unknown-error';
+
+    const errorMessage = this.getErrorMessage(errorCode);
+    store.dispatch(setError(errorMessage));
+
+    return;
+  } finally {
+    store.dispatch(setLoading(false));
+  }
+}
+,
 
   // Logout
   async logout(): Promise<void> {
@@ -86,7 +122,7 @@ export const AuthService = {
       await signOut(auth);
       
       try {
-        // await GoogleSignin.signOut();
+        await GoogleSignin.signOut();
       } catch (error) {
         // Ignore Google sign out errors
       }
@@ -104,21 +140,26 @@ export const AuthService = {
 
   // Error message mapper
   getErrorMessage(errorCode: string): string {
-    const errorMessages: { [key: string]: string } = {
-      'auth/invalid-email': 'Invalid email address',
-      'auth/user-disabled': 'This account has been disabled',
-      'auth/user-not-found': 'No account found with this email',
-      'auth/wrong-password': 'Incorrect password',
-      'auth/email-already-in-use': 'Email already in use',
-      'auth/weak-password': 'Password should be at least 6 characters',
-      'auth/network-request-failed': 'Network error. Please check your connection',
-      'auth/too-many-requests': 'Too many attempts. Please try again later',
-      'auth/account-exists-with-different-credential': 'Account already exists with different credentials',
-      'auth/popup-closed-by-user': 'Sign in cancelled',
-      'auth/cancelled-popup-request': 'Sign in cancelled',
-      'auth/popup-blocked': 'Popup blocked by browser',
-    };
-    
-    return errorMessages[errorCode] || 'An error occurred. Please try again.';
+  const errorMessages: Record<string, string> = {
+    'auth/invalid-email': 'Invalid email address',
+    'auth/user-disabled': 'This account has been disabled',
+    'auth/user-not-found': 'No account found with this email',
+    'auth/wrong-password': 'Incorrect password',
+    'auth/invalid-credential': 'Incorrect email or password',
+    'auth/email-already-in-use': 'Email already in use',
+    'auth/weak-password': 'Password should be at least 6 characters',
+    'auth/network-request-failed': 'Network error. Please check your connection',
+    'auth/too-many-requests': 'Too many attempts. Please try again later',
+    'auth/account-exists-with-different-credential':
+      'Account already exists with different credentials',
+  };
+
+  // 🔥 Handle message-based errors fallback
+  if (errorCode.includes('invalid-credential')) {
+    return 'Incorrect email or password';
   }
+
+  return errorMessages[errorCode] || 'An error occurred. Please try again.';
+}
+
 };

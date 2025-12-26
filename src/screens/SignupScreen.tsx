@@ -6,18 +6,17 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
 import { AuthService } from '../services/auth';
 import { RootState } from '../store/store';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import Loader from '../components/ui/Loader';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
+import Toast from 'react-native-toast-message';
+import Logo from '../components/common/Logo';
 
 type SignupScreenNavigationProp = StackNavigationProp<
   AuthStackParamList,
@@ -25,10 +24,10 @@ type SignupScreenNavigationProp = StackNavigationProp<
 >;
 
 const SignupScreen: React.FC = () => {
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { isLoading, error } = useSelector(
@@ -37,23 +36,17 @@ const SignupScreen: React.FC = () => {
   const navigation = useNavigation<SignupScreenNavigationProp>();
 
   const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!displayName.trim()) newErrors.displayName = 'Name is required';
-
-    if (!email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(email))
-      newErrors.email = 'Email is invalid';
-
-    if (!password) newErrors.password = 'Password is required';
-    else if (password.length < 6)
-      newErrors.password = 'Password must be at least 6 characters';
-
+    const e: any = {};
+    if (!displayName.trim()) e.displayName = 'Name required';
+    if (!email) e.email = 'Email required';
+    else if (!/\S+@\S+\.\S+/.test(email)) e.email = 'Invalid email';
+    if (!password) e.password = 'Password required';
+    else if (password.length < 6) e.password = 'Min 6 characters';
     if (password !== confirmPassword)
-      newErrors.confirmPassword = 'Passwords do not match';
+      e.confirmPassword = 'Passwords do not match';
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
   const handleSignup = async () => {
@@ -62,75 +55,74 @@ const SignupScreen: React.FC = () => {
     try {
       await AuthService.signupWithEmail(email, password, displayName);
 
-      // ✅ Navigate to Login after successful signup
+      Toast.show({
+        type: 'success',
+        text1: 'Account created',
+        text2: 'Please login to continue',
+      });
+
       navigation.replace('Login');
-    } catch (error: any) {
-      Alert.alert('Signup Failed', error.message);
-    }
+    } catch {}
   };
 
- 
   return (
-    <LinearGradient
-      colors={['#0F2027', '#203A43', '#2C5364']}
-      className="flex-1"
-    >
+    <View className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
         <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'center',
-          }}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="px-5">
-            {/* Card */}
-            <View className="bg-white rounded-3xl px-6 py-8 shadow-2xl">
-              <Text className="text-3xl font-rubik-bold text-gray-900 mb-2">
-                Create Account 🚀
+          <View className="px-6">
+            <View className="bg-white rounded-3xl px-6 py-8 shadow-xl border border-gray-100">
+
+              <View className="items-center mb-6">
+                <Logo size="xl" />
+              </View>
+
+              <Text className="text-2xl font-rubik-bold text-center text-gray-900">
+                Create your account
               </Text>
-              <Text className="text-gray-500 font-rubik mb-6">
-                Sign up to get started
+              <Text className="text-gray-500 text-center font-rubik mt-1 mb-8">
+                It takes less than a minute
               </Text>
 
               <Input
                 label="Full Name"
                 value={displayName}
                 onChangeText={setDisplayName}
-                placeholder="John Doe"
-                autoCapitalize="words"
                 error={errors.displayName}
+                placeholder="John Doe"
               />
 
               <Input
                 label="Email"
                 value={email}
                 onChangeText={setEmail}
-                placeholder="you@example.com"
-                keyboardType="email-address"
                 autoCapitalize="none"
+                keyboardType="email-address"
                 error={errors.email}
+                placeholder="eg. example@gmail.com"
               />
 
               <Input
                 label="Password"
                 value={password}
                 onChangeText={setPassword}
-                placeholder="••••••••"
                 secureTextEntry
                 error={errors.password}
+                placeholder="••••••••"
               />
 
               <Input
                 label="Confirm Password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                placeholder="••••••••"
                 secureTextEntry
                 error={errors.confirmPassword}
+                placeholder="••••••••"
               />
 
               <Button
@@ -138,10 +130,10 @@ const SignupScreen: React.FC = () => {
                 onPress={handleSignup}
                 loading={isLoading}
                 fullWidth
-                className="mt-4 mb-6"
+                className="mt-4"
               />
 
-              <View className="flex-row justify-center">
+              <View className="flex-row justify-center mt-6">
                 <Text className="text-gray-600 font-rubik">
                   Already have an account?
                 </Text>
@@ -149,13 +141,13 @@ const SignupScreen: React.FC = () => {
                   onPress={() => navigation.navigate('Login')}
                 >
                   <Text className="text-blue-600 font-rubik-bold ml-1">
-                    Sign In
+                    Sign in
                   </Text>
                 </TouchableOpacity>
               </View>
 
               {error && (
-                <View className="mt-4 p-3 bg-red-50 rounded-xl">
+                <View className="mt-4 bg-red-50 p-3 rounded-xl">
                   <Text className="text-red-600 text-center font-rubik">
                     {error}
                   </Text>
@@ -165,7 +157,7 @@ const SignupScreen: React.FC = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LinearGradient>
+    </View>
   );
 };
 
