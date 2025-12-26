@@ -5,6 +5,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../context/ThemeContext';
+import {name as clientName} from '../../app.json';
+import Logo from '../components/common/Logo';
 
 type SplashScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Splash'>;
 
@@ -26,18 +28,12 @@ const SplashScreen: React.FC = () => {
   return (
     <View className="flex-1 justify-center items-center bg-white">
       <View className="items-center">
-        {/* Replace with your app logo */}
-        <View 
-          className="w-32 h-32 rounded-full mb-8 justify-center items-center"
-          style={{ backgroundColor: colors.primary }}
-        >
-          <Text className="text-white font-rubik-bold text-4xl">LOGO</Text>
-        </View>
+        <Logo size='3xl'/>
         
-        <Text className="text-3xl font-rubik-semibold mb-2" style={{ color: colors.text }}>
-          Client Ready
+        <Text className="text-3xl mt-6 font-rubik-semibold mb-2" style={{ color: colors.text }}>
+          {clientName} 
         </Text>
-        <Text className="text-gray-600 font-rubik text-lg">Welcome to Client Ready App</Text>
+        <Text className="text-gray-600 font-rubik text-lg">Welcome to {clientName} App</Text>
         
         {isLoading && (
           <View className="mt-8">

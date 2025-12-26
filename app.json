@@ -1,4 +1,8 @@
 {
   "name": "rn_client_boilerplate",
-  "displayName": "rn_client_boilerplate"
+  "displayName": "rn_client_boilerplate",
+  "package": "com.rn_client_boilerplate",
+  "version": "1.0.0",
+  "description": "A React Native boilerplate for client apps",
+  "logo_url": "./"
 }

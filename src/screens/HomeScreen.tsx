@@ -6,6 +6,8 @@ import { RootState } from '../store/store';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
 import Feather from 'react-native-vector-icons/Feather';
+import {name as clientName} from '../../app.json';
+import Logo from '../components/common/Logo';
 
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -19,13 +21,12 @@ const HomeScreen: React.FC = () => {
     <ScrollView className="flex-1 bg-gray-50">
       {/* Header */}
       <View className="bg-white px-6 py-4 flex-row items-center justify-between shadow-sm">
+   
         {/* Logo + App Name */}
         <View className="flex-row items-center">
-          <View className="w-10 h-10 bg-blue-600 rounded-xl items-center justify-center mr-3">
-            <Text className="text-white font-rubik-bold text-lg">A</Text>
-          </View>
-          <Text className="text-xl font-rubik-bold text-gray-900">
-            Client App
+          <Logo size='md'/>
+          <Text className="text-xl ml-2 font-rubik-bold text-gray-900">
+            {clientName}
           </Text>
         </View>
 

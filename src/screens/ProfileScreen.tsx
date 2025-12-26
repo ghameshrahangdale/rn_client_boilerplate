@@ -124,7 +124,6 @@ const ProfileScreen: React.FC = () => {
                 value={user.emailVerified ? 'Verified' : 'Not Verified'}
                 valueColor={user.emailVerified ? 'green' : 'red'}
               />
-              <InfoRow label="User ID" value={`${user.uid.slice(0, 8)}...`} />
             </>
           )}
         </View>
@@ -154,7 +153,7 @@ const ProfileScreen: React.FC = () => {
 
         {/* Actions */}
         {isEditing ? (
-          <View className="flex-row space-x-4">
+          <View className="flex-row gap-4 space-x-4">
             <Button
               title="Cancel"
               variant="outline"
@@ -192,7 +191,7 @@ const InfoRow: React.FC<{
 }> = ({ label, value, valueColor = 'gray' }) => (
   <View className="flex-row py-3 border-b border-gray-200 last:border-b-0">
     <Text className="text-gray-500 font-rubik flex-1">{label}</Text>
-    <Text className={`font-rubik-medium text-${valueColor}-600`}>
+    <Text className={`font-rubik-medium text-${valueColor}-500`}>
       {value}
     </Text>
   </View>

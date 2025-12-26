@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { configureGoogleSignIn, signInWithGoogle } from '../services/googleSignIn';
+import Logo from '../components/common/Logo';
 
 type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -97,10 +98,11 @@ const LoginScreen: React.FC = () => {
           <View className="px-5">
             {/* Card */}
             <View className="bg-white rounded-3xl px-6 py-8 shadow-2xl">
-              <Text className="text-3xl font-rubik-bold text-gray-900 mb-2">
+            <Logo size='2xl'/>
+              <Text className="text-3xl mt-4 text-center font-rubik-bold text-gray-900 mb-2">
                 Welcome Back 👋
               </Text>
-              <Text className="text-gray-500 font-rubik mb-6">
+              <Text className="text-gray-500 text-center font-rubik mb-6">
                 Login to continue
               </Text>
 
@@ -124,7 +126,7 @@ const LoginScreen: React.FC = () => {
               />
 
               <TouchableOpacity className="self-end mb-6">
-                <Text className="text-blue-600 font-rubik-medium">
+                <Text className="text-blue-600 font-rubik">
                   Forgot Password?
                 </Text>
               </TouchableOpacity>
@@ -134,7 +136,7 @@ const LoginScreen: React.FC = () => {
                 onPress={handleLogin}
                 loading={isLoading}
                 fullWidth
-                className="mb-5"
+                // className="mb-5"
               />
 
               {/* Divider */}
@@ -161,7 +163,7 @@ const LoginScreen: React.FC = () => {
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Signup')}
                 >
-                  <Text className="text-blue-600 font-rubik-bold ml-1">
+                  <Text className="text-blue-600 font-rubik ml-1">
                     Sign Up
                   </Text>
                 </TouchableOpacity>

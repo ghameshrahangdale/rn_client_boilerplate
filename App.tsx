@@ -7,6 +7,8 @@ import './global.css';
 import { store } from './src/store/store';
 import AppNavigator from './src/navigation';
 import { ThemeProvider } from './src/context/ThemeContext';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/components/ui/toast';
 
 export default function App() {
   return (
@@ -16,6 +18,7 @@ export default function App() {
           <NavigationContainer>
             <StatusBar/>
             <AppNavigator />
+            <Toast config={toastConfig} />
           </NavigationContainer>
         </ThemeProvider>
       </SafeAreaProvider>
