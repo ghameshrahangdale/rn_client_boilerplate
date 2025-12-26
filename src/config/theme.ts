@@ -24,7 +24,7 @@ import { ThemeColors } from '../types';
 // Alternative theme example for different client:
 
 export const theme: ThemeColors = {
-  primary: '#3B82F6', // Blue
+  primary: '#f63b83ff', // Blue
   secondary: '#8B5CF6', // Purple
   background: '#FFFFFF',
   text: '#111827',

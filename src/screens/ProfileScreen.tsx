@@ -16,6 +16,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import { updateProfile } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigation } from '@react-navigation/native';
+import Avatar from '../components/ui/Avatar'; // <-- import Avatar
+import Header from '../components/ui/Header';
 
 const ProfileScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -57,43 +59,37 @@ const ProfileScreen: React.FC = () => {
   if (!user) return <Loader fullScreen />;
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-white px-6 py-4 flex-row items-center justify-between shadow-sm">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={22} color="#111827" />
-        </TouchableOpacity>
+      <Header
+  title="Profile"
+  avatarImageUrl={photoURL || user.photoURL || undefined}
+/>
 
-        <Text className="text-lg font-rubik-bold text-gray-900">
-          Profile
-        </Text>
-
-        <View className="w-9 h-9 rounded-full bg-gray-100 items-center justify-center">
-          <Feather name="user" size={18} color="#111827" />
-        </View>
-      </View>
-
-      <View className="p-6">
+      <ScrollView contentContainerStyle={{ padding: 24 }}>
         {/* Avatar */}
-        <View className="items-center mb-6">
-          <View className="w-28 h-28 rounded-full bg-blue-600 items-center justify-center mb-3">
-            <Text className="text-white text-4xl font-rubik-bold">
-              {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
-            </Text>
-          </View>
+        <View className="items-center mb-8">
+          <Avatar
+            name={displayName}
+            imageUrl={photoURL || user.photoURL || undefined}
+            size="3xl"
+          />
 
           {!isEditing && (
             <TouchableOpacity onPress={() => setIsEditing(true)}>
-              <Text className="text-blue-600 font-rubik-medium">
+              <Text
+                className="font-rubik-medium mt-3"
+                style={{ color: colors.primary }}
+              >
                 Edit Profile
               </Text>
             </TouchableOpacity>
           )}
         </View>
 
-        {/* Personal Info */}
+        {/* Profile Details */}
         <View className="bg-white rounded-2xl p-5 shadow-sm mb-6">
-          <Text className="text-lg font-rubik-bold text-gray-900 mb-4">
+          <Text className="text-base font-rubik-bold text-gray-900 mb-4">
             Personal Information
           </Text>
 
@@ -122,38 +118,15 @@ const ProfileScreen: React.FC = () => {
               <InfoRow
                 label="Email Verified"
                 value={user.emailVerified ? 'Verified' : 'Not Verified'}
-                valueColor={user.emailVerified ? 'green' : 'red'}
+                valueColor={user.emailVerified ? colors.success : colors.error}
               />
             </>
           )}
         </View>
 
-        {/* Account Settings */}
-        <View className="bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
-          {[
-            { label: 'Change Password', icon: 'lock' },
-            { label: 'Privacy Settings', icon: 'eye' },
-            { label: 'Notifications', icon: 'bell' },
-            { label: 'Help & Support', icon: 'help-circle' },
-          ].map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              className={`flex-row items-center px-5 py-4 ${
-                index < 3 ? 'border-b border-gray-200' : ''
-              }`}
-            >
-              <Feather name={item.icon as any} size={20} color="#2563EB" />
-              <Text className="ml-4 text-gray-800 font-rubik flex-1">
-                {item.label}
-              </Text>
-              <Feather name="chevron-right" size={18} color="#9CA3AF" />
-            </TouchableOpacity>
-          ))}
-        </View>
-
         {/* Actions */}
         {isEditing ? (
-          <View className="flex-row gap-4 space-x-4">
+          <View className="flex-row gap-4">
             <Button
               title="Cancel"
               variant="outline"
@@ -166,7 +139,7 @@ const ProfileScreen: React.FC = () => {
               }}
             />
             <Button
-              title="Save"
+              title="Save Changes"
               className="flex-1"
               loading={isLoading}
               onPress={handleSaveProfile}
@@ -179,24 +152,29 @@ const ProfileScreen: React.FC = () => {
             onPress={() => setIsEditing(true)}
           />
         )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
-const InfoRow: React.FC<{
+const InfoRow = ({
+  label,
+  value,
+  valueColor,
+}: {
   label: string;
   value: string;
   valueColor?: string;
-}> = ({ label, value, valueColor = 'gray' }) => (
+}) => (
   <View className="flex-row py-3 border-b border-gray-200 last:border-b-0">
     <Text className="text-gray-500 font-rubik flex-1">{label}</Text>
-    <Text className={`font-rubik-medium text-${valueColor}-500`}>
+    <Text
+      className="font-rubik-medium"
+      style={{ color: valueColor || '#374151' }}
+    >
       {value}
     </Text>
   </View>
 );
 
 export default ProfileScreen;
-
-

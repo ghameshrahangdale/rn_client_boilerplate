@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { AuthService } from '../services/auth';
@@ -8,10 +8,13 @@ import Button from '../components/ui/Button';
 import Feather from 'react-native-vector-icons/Feather';
 import {name as clientName} from '../../app.json';
 import Logo from '../components/common/Logo';
+import Avatar from '../components/ui/Avatar';
 
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
+    const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
+  
 
   const handleLogout = async () => {
     await AuthService.logout();
@@ -31,9 +34,9 @@ const HomeScreen: React.FC = () => {
         </View>
 
         {/* Profile Icon */}
-        <TouchableOpacity className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center">
-          <Feather name="user" size={20} color="#333" />
-        </TouchableOpacity>
+        <Avatar
+            imageUrl={photoURL || user?.photoURL || undefined}
+          />
       </View>
 
       <View className="p-6">

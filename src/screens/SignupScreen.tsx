@@ -50,20 +50,34 @@ const SignupScreen: React.FC = () => {
   };
 
   const handleSignup = async () => {
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    try {
-      await AuthService.signupWithEmail(email, password, displayName);
+  try {
+    await AuthService.signupWithEmail(email, password, displayName);
 
-      Toast.show({
-        type: 'success',
-        text1: 'Account created',
-        text2: 'Please login to continue',
-      });
+    // 🔑 Redux error check
+    if (error) {
+      throw new Error(error);
+    }
 
-      navigation.replace('Login');
-    } catch {}
-  };
+    Toast.show({
+      type: 'success',
+      text1: 'Account created',
+      text2: 'Please login to continue',
+    });
+
+    navigation.replace('Login');
+  } catch (err: any) {
+    const message = err?.message || 'Signup failed';
+
+    Toast.show({
+      type: 'error',
+      text1: 'Signup Failed',
+      text2: message,
+    });
+  }
+};
+
 
   return (
     <View className="flex-1 bg-gray-50">

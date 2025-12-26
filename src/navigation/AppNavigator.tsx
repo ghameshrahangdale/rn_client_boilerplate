@@ -2,12 +2,14 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import MenuScreen from '../screens/MenuScreen';
 import { useTheme } from '../context/ThemeContext';
 import Feather from 'react-native-vector-icons/Feather';
 
 export type AppTabParamList = {
   Home: undefined;
   Profile: undefined;
+  Menu: undefined;
 };
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
@@ -18,14 +20,12 @@ const AppNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: string = 'circle';
+        tabBarIcon: ({ color, size }) => {
+          let iconName = 'circle';
 
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'user' : 'user';
-          }
+          if (route.name === 'Home') iconName = 'home';
+          if (route.name === 'Profile') iconName = 'user';
+          if (route.name === 'Menu') iconName = 'menu';
 
           return <Feather name={iconName} size={size} color={color} />;
         },
@@ -45,16 +45,9 @@ const AppNavigator: React.FC = () => {
         },
       })}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ title: 'Home' }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
-      />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Menu" component={MenuScreen} />
     </Tab.Navigator>
   );
 };
