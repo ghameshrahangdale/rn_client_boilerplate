@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, View, ImageSourcePropType } from 'react-native';
-import { Images } from '../../constants/assets';
+import { Images } from '../../config/logo.config';
 
 type LogoSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
