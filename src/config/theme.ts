@@ -1,7 +1,7 @@
 import { ThemeColors } from '../types';
 
 export const theme: ThemeColors = {
-  primary: '#4F46E5', // Blue
+  primary: '#e54646ff', // Blue
   secondary: '#8B5CF6', // Purple
   background: '#FFFFFF',
   text: '#111827',

@@ -69,7 +69,10 @@ const ProfileScreen: React.FC = () => {
       <ScrollView contentContainerStyle={{ padding: 24 }}>
         {/* Avatar */}
         <View className="items-center mb-8">
-          
+          <Avatar
+            imageUrl={photoURL || user?.photoURL || undefined}
+            size="3xl"
+          />
 
           {!isEditing && (
             <TouchableOpacity onPress={() => setIsEditing(true)}>
@@ -163,7 +166,9 @@ const InfoRow = ({
   valueColor?: string;
 }) => (
   <View className="flex-row py-3 border-b border-gray-200 last:border-b-0">
-    <Text className="text-gray-500 font-rubik flex-1">{label}</Text>
+    <Text className="text-gray-500 font-rubik mr-2">
+      {label}
+    </Text>
     <Text
       className="font-rubik-medium"
       style={{ color: valueColor || '#374151' }}
@@ -172,5 +177,6 @@ const InfoRow = ({
     </Text>
   </View>
 );
+
 
 export default ProfileScreen;
