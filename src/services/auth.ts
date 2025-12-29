@@ -34,7 +34,7 @@ export const AuthService = {
       
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = mapFirebaseUser(userCredential.user);
-      store.dispatch(setUser(user));
+      store.dispatch(setUser(user as any));
       return Promise.resolve();
     } catch (error: any) {
       console.log('Login error:', error);
@@ -96,7 +96,7 @@ async signupWithEmail(
       
       const userCredential = await signInWithCredential(auth, credential);
       const user = mapFirebaseUser(userCredential.user);
-      store.dispatch(setUser(user));
+      store.dispatch(setUser(user as any));
       return Promise.resolve();
     } catch (error: any) {
       const errorCode = error?.code || error?.message || 'unknown-error';

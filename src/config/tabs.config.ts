@@ -5,18 +5,7 @@ export const TAB_CONFIG = [
     icon: 'home',
     label: 'Home',
   },
-  {
-    name: 'Profile',
-    component: 'ProfileScreen',
-    icon: 'user',
-    label: 'Profile',
-  },
-  {
-    name: 'Menu',
-    component: 'MenuScreen',
-    icon: 'menu',
-    label: 'Menu',
-  },
+  
   {
     name: 'Account',
     component: 'MenuScreen',

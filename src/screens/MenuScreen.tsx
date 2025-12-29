@@ -21,6 +21,7 @@ import { package as packageName } from '../../app.json';
 import Avatar from '../components/ui/Avatar';
 import Toast from 'react-native-toast-message';
 import ConfirmationPopup from '../components/ui/ConfirmationPopup';
+import { AuthService } from '../services/auth';
 
 const MenuScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -47,7 +48,8 @@ const MenuScreen: React.FC = () => {
   const handleLogout = async () => {
 
     try {
-      await signOut(auth);
+      await AuthService.logout();
+      
 
       Toast.show({
         type: 'success',

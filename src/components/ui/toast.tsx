@@ -38,11 +38,11 @@ export const toastConfig = {
     >
       <Logo size="sm" />
       <View className="ml-3 flex-1">
-        <Text className="text-red-600 font-semibold text-base">
+        <Text className="text-red-600 font-rubik-semibold text-base">
           {text1}
         </Text>
         {text2 ? (
-          <Text className="text-gray-600 text-sm mt-0.5">
+          <Text className="text-gray-600 font-rubik text-sm mt-0.5">
             {text2}
           </Text>
         ) : null}
@@ -57,11 +57,11 @@ export const toastConfig = {
     >
       <Logo size="sm" />
       <View className="ml-3 flex-1">
-        <Text className="text-blue-600 font-semibold text-base">
+        <Text className="text-blue-600 font-rubik-semibold text-base">
           {text1}
         </Text>
         {text2 ? (
-          <Text className="text-gray-600 text-sm mt-0.5">
+          <Text className="text-gray-600 font-rubik text-sm mt-0.5">
             {text2}
           </Text>
         ) : null}

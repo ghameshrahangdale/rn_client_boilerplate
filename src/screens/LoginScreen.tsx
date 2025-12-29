@@ -29,6 +29,8 @@ const LoginScreen: React.FC = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [localError, setLocalError] = useState('');
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const { isLoading, error } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
@@ -71,6 +73,8 @@ const LoginScreen: React.FC = () => {
     if (!validateForm()) return;
     
     try {
+       setEmailLoading(true);
+
       await AuthService.loginWithEmail(email, password);
       
       // If login is successful, show success message
@@ -90,11 +94,14 @@ const LoginScreen: React.FC = () => {
         text1: 'Login Failed',
         text2: error.message,
       });
+    } finally {
+      setEmailLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
+      setGoogleLoading(true);
       const credential = await signInWithGoogle();
       if (!credential) {
         Toast.show({
@@ -121,6 +128,8 @@ const LoginScreen: React.FC = () => {
         text1: 'Google Login Failed',
         text2: error.message || 'Failed to sign in with Google',
       });
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -180,7 +189,7 @@ const LoginScreen: React.FC = () => {
               {/* Forgot */}
               <TouchableOpacity 
                 className="self-end mb-6"
-                // onPress={() => navigation.navigate('ForgotPassword')}
+                onPress={() => navigation.navigate('ForgotPassword')}
               >
                 <Text className="text-sm text-blue-600 font-rubik">
                   Forgot password?
@@ -191,7 +200,7 @@ const LoginScreen: React.FC = () => {
               <Button
                 title="Sign In"
                 onPress={handleLogin}
-                loading={isLoading}
+                loading={emailLoading}
                 fullWidth
               />
 
@@ -206,7 +215,7 @@ const LoginScreen: React.FC = () => {
               <Button
                 title="Continue with Google"
                 onPress={handleGoogleLogin}
-                loading={isLoading}
+                loading={googleLoading}
                 variant="outline"
                 fullWidth
               />
