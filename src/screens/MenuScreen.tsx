@@ -16,51 +16,62 @@ import { auth } from '../config/firebase';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import Header from '../components/ui/Header';
-import { getVersion, getApplicationName } from 'react-native-device-info'; 
+import { getVersion, getApplicationName } from 'react-native-device-info';
 import { package as packageName } from '../../app.json';
 import Avatar from '../components/ui/Avatar';
+import Toast from 'react-native-toast-message';
+import ConfirmationPopup from '../components/ui/ConfirmationPopup';
 
 const MenuScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigation = useNavigation();
-const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
-  
+  const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
+  const [showLogout, setShowLogout] = useState(false);
   const { colors } = useTheme();
 
   const handleShareApp = async () => {
-  try {
-    const appName = getApplicationName();
-    const message =
-      Platform.OS === 'android'
-        ? `Check out ${appName} on Google Play Store: https://play.google.com/store/apps/details?id=rn_boilerplate`
-        : `Check out ${appName} on App Store: https://apps.apple.com/app/id`;
-    await Share.share({ message });
-  } catch (error) {
-    Alert.alert('Error', 'Unable to share the app.');
-  }
-};
+    try {
+      const appName = getApplicationName();
+      const message =
+        Platform.OS === 'android'
+          ? `Check out ${appName} on Google Play Store: https://play.google.com/store/apps/details?id=rn_boilerplate`
+          : `Check out ${appName} on App Store: https://apps.apple.com/app/id`;
+      await Share.share({ message });
+    } catch (error) {
+      Alert.alert('Error', 'Unable to share the app.');
+    }
+  };
+
 
 
   const handleLogout = async () => {
-    Alert.alert('Logout', 'Are you sure you want to logout?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Logout',
-        style: 'destructive',
-        onPress: async () => {
-          await signOut(auth);
-        },
-      },
-    ]);
+
+    try {
+      await signOut(auth);
+
+      Toast.show({
+        type: 'success',
+        text1: 'Logged out',
+        text2: 'You have been logged out successfully',
+        position: 'bottom',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Logout failed',
+        text2: 'Please try again',
+        position: 'bottom',
+      });
+    }
   };
 
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
       <Header
-  title="Menu"
-  avatarImageUrl={photoURL || user?.photoURL || undefined}
-/>
+        title="Account & Menu"
+        avatarImageUrl={photoURL || user?.photoURL || undefined}
+      />
 
       <ScrollView>
         {/* Profile Card */}
@@ -95,7 +106,7 @@ const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
             label="App Info"
             color={colors.primary}
             onPress={() => navigation.navigate('AppInfo' as never)}
-            
+
           />
           <MenuItem
             icon="share-2"
@@ -114,7 +125,7 @@ const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
         {/* Logout */}
         <View className="bg-white mx-4 mt-6 rounded-2xl shadow-sm">
           <TouchableOpacity
-            onPress={handleLogout}
+            onPress={() => setShowLogout(true)}
             className="flex-row items-center px-5 py-4"
           >
             <Feather
@@ -128,6 +139,18 @@ const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+       <ConfirmationPopup
+        visible={showLogout}
+        title="Logout"
+        message="Are you sure you want to logout?"
+        confirmText="Logout"
+        onCancel={() => setShowLogout(false)}
+        onConfirm={() => {
+          setShowLogout(false);
+          handleLogout();
+        }}
+      />
     </View>
   );
 };

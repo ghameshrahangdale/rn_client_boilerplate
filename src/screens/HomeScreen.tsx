@@ -20,9 +20,7 @@ const HomeScreen: React.FC = () => {
 
   const firstName = user?.displayName?.split(' ')[0];
 
-  const handleLogout = async () => {
-    await AuthService.logout();
-  };
+ 
 
   return (
     <ScrollView
@@ -163,13 +161,6 @@ const HomeScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Logout */}
-        <Button
-          title="Logout"
-          variant="outline"
-          fullWidth
-          onPress={handleLogout}
-        />
       </View>
     </ScrollView>
   );

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { AuthService } from '../services/auth';
-import { RootState } from '../store/store';
+import { RootState, store } from '../store/store';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { useTheme } from '../context/ThemeContext';
@@ -19,6 +19,7 @@ import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { configureGoogleSignIn, signInWithGoogle } from '../services/googleSignIn';
 import Logo from '../components/common/Logo';
 import Toast from 'react-native-toast-message';
+import { setError } from '../store/slices/authSlice';
 
 type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -127,7 +128,7 @@ const LoginScreen: React.FC = () => {
   useEffect(() => {
     return () => {
       // You might want to clear auth error when leaving the screen
-      // store.dispatch(setError(''));
+      store.dispatch(setError(''));
     };
   }, []);
 
