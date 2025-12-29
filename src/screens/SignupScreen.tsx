@@ -154,7 +154,7 @@ const SignupScreen: React.FC = () => {
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Login')}
                 >
-                  <Text className="text-blue-600 font-rubik-bold ml-1">
+                  <Text className="text-blue-600 font-rubik-medium ml-1">
                     Sign in
                   </Text>
                 </TouchableOpacity>

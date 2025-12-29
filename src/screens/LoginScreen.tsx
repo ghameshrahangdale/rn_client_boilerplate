@@ -124,10 +124,8 @@ const LoginScreen: React.FC = () => {
     }
   };
 
-  // Clear error when component unmounts or when navigation happens
   useEffect(() => {
     return () => {
-      // You might want to clear auth error when leaving the screen
       store.dispatch(setError(''));
     };
   }, []);
@@ -219,7 +217,7 @@ const LoginScreen: React.FC = () => {
                   Don't have an account?
                 </Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                  <Text className="text-blue-600 font-rubik-bold ml-1">
+                  <Text className="text-blue-600 font-rubik-medium ml-1">
                     Sign up
                   </Text>
                 </TouchableOpacity>
