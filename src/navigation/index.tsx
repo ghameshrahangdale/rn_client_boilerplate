@@ -1,9 +1,9 @@
+// navigation/Navigation.tsx
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import AuthNavigator from './AuthNavigator';
-import AppNavigator from './AppNavigator';
-import Loader from '../components/ui/Loader';
 import AppStackNavigator from './AppStackNavigator';
+import Loader from '../components/ui/Loader';
 
 const Navigation: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();

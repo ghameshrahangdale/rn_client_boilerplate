@@ -3,7 +3,9 @@
   "compilerOptions": {
     "types": [
       "jest"
-    ]
+    ],
+    "moduleResolution": "bundler", 
+    "strict": true,
   },
   "include": [
     "**/*.ts",

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../config/firebase';
+// hooks/useAuth.ts
+import { useEffect, useState } from 'react';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'; // Import from native module
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading } from '../store/slices/authSlice';
 import { RootState } from '../store/store';
@@ -11,31 +11,23 @@ export const useAuth = () => {
   const { user, isLoading, isAuthenticated, error } = useSelector(
     (state: RootState) => state.auth
   );
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        const userData: User = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          phoneNumber: firebaseUser.phoneNumber,
-          emailVerified: firebaseUser.emailVerified,
-        };
-        dispatch(setUser(userData));
-      } else {
-        dispatch(setUser(null));
+    const unsubscribe = auth().onAuthStateChanged(
+      (firebaseUser: FirebaseAuthTypes.User | null) => {
+        dispatch(setUser(firebaseUser));
+        setIsInitializing(false); // 🔥 ONLY place loader stops
+        
       }
-      dispatch(setLoading(false));
-    });
+    );
 
     return unsubscribe;
   }, [dispatch]);
 
   return {
     user,
-    isLoading,
+    isLoading: isInitializing,
     isAuthenticated,
     error,
   };

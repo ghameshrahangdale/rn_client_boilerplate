@@ -30,25 +30,24 @@ export const AuthService = {
  async loginWithEmail(email: string, password: string): Promise<void> {
     try {
       store.dispatch(setLoading(true));
-      store.dispatch(setError('')); // Clear previous errors
+      store.dispatch(setError(''));
+      
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = mapFirebaseUser(userCredential.user);
       store.dispatch(setUser(user));
+      return Promise.resolve();
     } catch (error: any) {
-      console.log('Firebase login error raw:', JSON.stringify(error, null, 2));
-      const errorCode =
-  typeof error?.code === 'string'
-    ? error.code
-    : typeof error?.message === 'string'
-    ? error.message
-    : 'unknown-error';
-
-const errorMessage = this.getErrorMessage(errorCode);
-
+      console.log('Login error:', error);
+      const errorCode = error?.code || error?.message || 'unknown-error';
+      const errorMessage = this.getErrorMessage(errorCode);
+      
+      // Set error WITHOUT clearing user state
       store.dispatch(setError(errorMessage));
-      throw new Error(errorMessage);
-    } finally {
+      
+      // Keep loading false but don't reset user
       store.dispatch(setLoading(false));
+      
+      return Promise.reject(new Error(errorMessage));
     }
   },
 
@@ -90,30 +89,31 @@ async signupWithEmail(
 ,
 
   // Google Sign-In
+  
   async signInWithGoogle(credential: AuthCredential): Promise<void> {
-  try {
-    store.dispatch(setLoading(true));
-
-    const userCredential = await signInWithCredential(auth, credential);
-    const user = mapFirebaseUser(userCredential.user);
-    store.dispatch(setUser(user));
-  } catch (error: any) {
-    const errorCode =
-      typeof error?.code === 'string'
-        ? error.code
-        : typeof error?.message === 'string'
-        ? error.message
-        : 'unknown-error';
-
-    const errorMessage = this.getErrorMessage(errorCode);
-    store.dispatch(setError(errorMessage));
-
-    return;
-  } finally {
-    store.dispatch(setLoading(false));
-  }
-}
-,
+    try {
+      store.dispatch(setLoading(true));
+      
+      const userCredential = await signInWithCredential(auth, credential);
+      const user = mapFirebaseUser(userCredential.user);
+      store.dispatch(setUser(user));
+      return Promise.resolve();
+    } catch (error: any) {
+      const errorCode = error?.code || error?.message || 'unknown-error';
+      const errorMessage = this.getErrorMessage(errorCode);
+      
+      // Set error without clearing user state
+      store.dispatch(setError(errorMessage));
+      store.dispatch(setLoading(false));
+      
+      return Promise.reject(new Error(errorMessage));
+    }
+  },
+  
+  // Add this method to explicitly handle logout
+  async clearError(): Promise<void> {
+    store.dispatch(setError(null));
+  },
 
   // Logout
   async logout(): Promise<void> {

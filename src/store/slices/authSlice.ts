@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, User } from '../../types';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+
+interface AuthState {
+  user: FirebaseAuthTypes.User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
 
 const initialState: AuthState = {
   user: null,
-  isLoading: false,
   isAuthenticated: false,
+  isLoading: true, // 🔥 app starts loading
   error: null,
 };
 
@@ -12,24 +19,33 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
+    setUser(
+      state,
+      action: PayloadAction<FirebaseAuthTypes.User | null>
+    ) {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload;
+      state.isAuthenticated = !!action.payload; // 🔥 KEY LINE
+      state.isLoading = false;
       state.error = null;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+
+    setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
+
+    setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
     },
-    logout: (state) => {
+
+    logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-      state.error = null;
+      state.isLoading = false;
     },
   },
 });
 
-export const { setUser, setLoading, setError, logout } = authSlice.actions;
+export const { setUser, setLoading, setError, logout } =
+  authSlice.actions;
+
 export default authSlice.reducer;
