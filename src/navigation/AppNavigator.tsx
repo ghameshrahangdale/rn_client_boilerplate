@@ -16,6 +16,20 @@ const Tab = createBottomTabNavigator<AppTabParamList>();
 const AppNavigator: React.FC = () => {
   const { colors } = useTheme();
 
+  const getScreenComponent = (componentName: keyof typeof SCREEN_MAP) => {
+  const Screen = SCREEN_MAP[componentName];
+
+  if (!Screen) {
+    console.warn(
+      `⚠️ Screen "${componentName}" is not registered in SCREEN_MAP`
+    );
+    return SCREEN_MAP.FallbackScreen;
+  }
+
+  return Screen;
+};
+
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -50,7 +64,7 @@ const AppNavigator: React.FC = () => {
         <Tab.Screen
           key={tab.name}
           name={tab.name as keyof AppTabParamList}
-          component={SCREEN_MAP[tab.component]}
+          component={getScreenComponent(tab.component)}
           options={{ tabBarLabel: tab.label }}
         />
       ))}
