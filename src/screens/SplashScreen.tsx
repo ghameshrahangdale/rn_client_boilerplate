@@ -40,7 +40,9 @@ const SplashScreen: React.FC = () => {
         
         {isLoading && (
           <View className="mt-8">
-            <Text className="text-gray-500 font-rubik">Loading...</Text>
+            <Text
+            style={{ color: colors.primary }}
+             className="text-gray-500 font-rubik">Loading...</Text>
           </View>
         )}
       </View>

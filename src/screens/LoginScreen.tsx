@@ -112,7 +112,7 @@ const LoginScreen: React.FC = () => {
         return;
       }
       
-      await AuthService.signInWithGoogle(credential);
+      await AuthService.signInWithGoogle();
       
       // If login is successful, show success message
       Toast.show({
