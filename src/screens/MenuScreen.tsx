@@ -101,7 +101,7 @@ const MenuScreen: React.FC = () => {
             icon="user"
             label="My Profile"
             color={colors.primary}
-            onPress={() => navigation.navigate('Profile' as never)}
+            onPress={() => navigation.navigate('MyProfile' as never)}
           />
           <MenuItem
             icon="info"
