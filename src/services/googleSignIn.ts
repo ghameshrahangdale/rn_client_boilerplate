@@ -5,7 +5,7 @@ export const configureGoogleSignIn = () => {
   GoogleSignin.configure({ 
     webClientId: '533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com', // Required for Android
     // iosClientId: 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com', 
-    offlineAccess: true, 
+    offlineAccess: false, 
     forceCodeForRefreshToken: true,
   });
 };
