@@ -13,10 +13,10 @@ export const TAB_CONFIG = [
     label: 'Account',
   },
 
-  {
-    name: 'Settings',
-    component: 'MenuScreen',
-    icon: 'settings',
-    label: 'Settings',
-  },
+  // {
+  //   name: 'Settings',
+  //   component: 'MenuScreen',
+  //   icon: 'settings',
+  //   label: 'Settings',
+  // },
 ] as const;
