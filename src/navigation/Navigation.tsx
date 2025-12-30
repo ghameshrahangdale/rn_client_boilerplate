@@ -1,4 +1,3 @@
-// navigation/Navigation.tsx
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import AuthNavigator from './AuthNavigator';
