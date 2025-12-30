@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { StatusBar } from 'react-native';
 import './global.css';
 import { store } from './src/store/store';
-import AppNavigator from './src/navigation';
+import Navigation from './src/navigation/Navigation';
 import { ThemeProvider } from './src/context/ThemeContext';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './src/components/ui/toast';
@@ -17,7 +17,7 @@ export default function App() {
         <ThemeProvider>
           <NavigationContainer>
             <StatusBar/>
-            <AppNavigator />
+            <Navigation />
             <Toast config={toastConfig} />
           </NavigationContainer>
         </ThemeProvider>

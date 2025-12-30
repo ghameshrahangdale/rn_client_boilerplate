@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import AppNavigator from './AppNavigator';
+import BottomTabsNavigations from './BottomTabsNavigations';
 import AppInfoScreen from '../screens/AppInfoScreen';
 
 
@@ -17,7 +17,7 @@ const AppStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* Bottom Tabs */}
-      <Stack.Screen name="Tabs" component={AppNavigator} />
+      <Stack.Screen name="Tabs" component={BottomTabsNavigations} />
 
       {/* Screens NOT in bottom tabs */}
       <Stack.Screen name="AppInfo" component={AppInfoScreen} />
