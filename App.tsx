@@ -16,6 +16,7 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeProvider>
           <NavigationContainer>
+            
             <StatusBar/>
             <Navigation />
             <Toast config={toastConfig} />

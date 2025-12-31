@@ -7,9 +7,6 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import { AuthService } from '../services/auth';
-import { RootState, store } from '../store/store';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { useTheme } from '../context/ThemeContext';
@@ -19,7 +16,7 @@ import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { configureGoogleSignIn, signInWithGoogle } from '../services/googleSignIn';
 import Logo from '../components/common/Logo';
 import Toast from 'react-native-toast-message';
-import { setError } from '../store/slices/authSlice';
+import { AuthService } from '../services/auth';
 
 type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -28,11 +25,10 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [localError, setLocalError] = useState('');
+  const [error, setError] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
@@ -44,7 +40,7 @@ const LoginScreen: React.FC = () => {
   useEffect(() => {
     if (email) setEmailError('');
     if (password) setPasswordError('');
-    if (localError) setLocalError('');
+    if (error) setError('');
   }, [email, password]);
 
   const validateForm = () => {
@@ -73,7 +69,8 @@ const LoginScreen: React.FC = () => {
     if (!validateForm()) return;
     
     try {
-       setEmailLoading(true);
+      setEmailLoading(true);
+      setError('');
 
       await AuthService.loginWithEmail(email, password);
       
@@ -86,7 +83,7 @@ const LoginScreen: React.FC = () => {
     } catch (error: any) {
       console.log(error);
       
-      setLocalError(error.message);
+      setError(error.message);
       
       // Show error toast
       Toast.show({
@@ -102,6 +99,8 @@ const LoginScreen: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       setGoogleLoading(true);
+      setError('');
+
       const credential = await signInWithGoogle();
       if (!credential) {
         Toast.show({
@@ -121,7 +120,8 @@ const LoginScreen: React.FC = () => {
         text2: 'Welcome back 👋',
       });
     } catch (error: any) {
-      // Error is already handled by AuthService and stored in Redux state
+      setError(error.message || 'Failed to sign in with Google');
+      
       // Show error toast
       Toast.show({
         type: 'error',
@@ -135,7 +135,7 @@ const LoginScreen: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      store.dispatch(setError(''));
+      setError('');
     };
   }, []);
 
@@ -232,11 +232,11 @@ const LoginScreen: React.FC = () => {
                 </TouchableOpacity>
               </View>
 
-              {/* Error Display - Combined from Redux and local state */}
-              {(error || localError) && (
+              {/* Error Display */}
+              {error && (
                 <View className="mt-4 bg-red-50 p-3 rounded-xl">
                   <Text className="text-red-600 text-center font-rubik">
-                    {error || localError}
+                    {error}
                   </Text>
                 </View>
               )}

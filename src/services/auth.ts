@@ -28,52 +28,52 @@ export const AuthService = {
   // Email/Password Login
   async loginWithEmail(email: string, password: string): Promise<void> {
     try {
-      store.dispatch(setLoading(true));
-      store.dispatch(setError(null));
+      // store.dispatch(setLoading(true));
+      // store.dispatch(setError(null));
       
       const userCredential = await auth().signInWithEmailAndPassword(email, password);
       const user = mapFirebaseUser(userCredential.user);
       store.dispatch(setUser(user as any));
     } catch (error: any) {
-      console.log('Login error:', error);
       const errorCode = error?.code || error?.message || 'unknown-error';
       const errorMessage = this.getErrorMessage(errorCode);
-      store.dispatch(setError(errorMessage));
-      store.dispatch(setLoading(false));
+      // store.dispatch(setError(errorMessage));
+      // store.dispatch(setLoading(false));
       throw new Error(errorMessage);
     }
   },
 
   // Email/Password Signup
-  async signupWithEmail(
-    email: string,
-    password: string,
-    displayName: string
-  ): Promise<void> {
-    try {
-      store.dispatch(setLoading(true));
-      store.dispatch(setError(null));
+async signupWithEmail(
+  email: string,
+  password: string,
+  displayName: string
+): Promise<void> {
+  try {
+   
 
-      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+    const userCredential = await auth().createUserWithEmailAndPassword(email, password);
 
-      await userCredential.user.updateProfile({
-        displayName: displayName,
-      });
+   
+    await userCredential.user.updateProfile({
+      displayName: displayName,
+    });
 
-      // Sign out after signup if you don't want auto-login
-      await auth().signOut();
-      
-      // Clear user from redux after signup
-      store.dispatch(setUser(null));
-      store.dispatch(setLoading(false));
-    } catch (error: any) {
-      const errorCode = error?.code || error?.message || 'unknown-error';
-      const errorMessage = this.getErrorMessage(errorCode);
-      store.dispatch(setError(errorMessage));
-      store.dispatch(setLoading(false));
-      throw new Error(errorMessage);
-    }
-  },
+ 
+    await auth().signOut();
+    
+    return; 
+  } catch (error: any) {
+    const errorCode = error?.code || error?.message || 'unknown-error';
+    const errorMessage = this.getErrorMessage(errorCode);
+    
+    // ✅ Don't dispatch to Redux to prevent app reset
+    // store.dispatch(setError(errorMessage)); // Remove this
+    // store.dispatch(setLoading(false)); // Remove this
+    
+    throw new Error(errorMessage);
+  }
+},
 
   // Google Sign-In
   async signInWithGoogle(): Promise<void> {

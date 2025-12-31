@@ -7,9 +7,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useSelector } from 'react-redux';
 import { AuthService } from '../services/auth';
-import { RootState } from '../store/store';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { useNavigation } from '@react-navigation/native';
@@ -29,10 +27,9 @@ const SignupScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [signupError, setSignupError] = useState<string | null>(null);
 
-  const { isLoading, error } = useSelector(
-    (state: RootState) => state.auth
-  );
   const navigation = useNavigation<SignupScreenNavigationProp>();
 
   const validateForm = () => {
@@ -50,34 +47,36 @@ const SignupScreen: React.FC = () => {
   };
 
   const handleSignup = async () => {
-  if (!validateForm()) return;
+    // Clear previous errors
+    setSignupError(null);
+    
+    if (!validateForm()) return;
 
-  try {
-    await AuthService.signupWithEmail(email, password, displayName);
+    setIsLoading(true);
+    
+    try {
+      await AuthService.signupWithEmail(email, password, displayName);
 
-    // 🔑 Redux error check
-    if (error) {
-      throw new Error(error);
+      Toast.show({
+        type: 'success',
+        text1: 'Account created',
+        text2: 'Please login to continue',
+      });
+
+      navigation.replace('Login');
+    } catch (err: any) {
+      const message = err?.message || 'Signup failed';
+      setSignupError(message);
+
+      Toast.show({
+        type: 'error',
+        text1: 'Signup Failed',
+        text2: message,
+      });
+    } finally {
+      setIsLoading(false);
     }
-
-    Toast.show({
-      type: 'success',
-      text1: 'Account created',
-      text2: 'Please login to continue',
-    });
-
-    navigation.replace('Login');
-  } catch (err: any) {
-    const message = err?.message || 'Signup failed';
-
-    Toast.show({
-      type: 'error',
-      text1: 'Signup Failed',
-      text2: message,
-    });
-  }
-};
-
+  };
 
   return (
     <View className="flex-1 bg-gray-50">
@@ -160,10 +159,10 @@ const SignupScreen: React.FC = () => {
                 </TouchableOpacity>
               </View>
 
-              {error && (
+              {signupError && (
                 <View className="mt-4 bg-red-50 p-3 rounded-xl">
                   <Text className="text-red-600 text-center font-rubik">
-                    {error}
+                    {signupError}
                   </Text>
                 </View>
               )}

@@ -12,7 +12,6 @@ export const TAB_CONFIG = [
     icon: 'user',
     label: 'Account',
   },
-
   // {
   //   name: 'Settings',
   //   component: 'MenuScreen',
