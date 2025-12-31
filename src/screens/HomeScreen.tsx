@@ -9,6 +9,7 @@ import { name as clientName } from '../../app.json';
 import Logo from '../components/common/Logo';
 import Avatar from '../components/ui/Avatar';
 import { AuthService } from '../services/auth';
+import HomeHeader from '../components/ui/HomeHeader';
 
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -27,23 +28,11 @@ const HomeScreen: React.FC = () => {
       contentContainerStyle={{ paddingBottom: 32 }}
       className="flex-1 bg-gray-50"
     >
-      {/* Header */}
-      <View
-        className="px-6 pt-6 pb-4 flex-row items-center justify-between shadow-sm"
-        style={{ backgroundColor: surface }}
-      >
-        <View className="flex-row items-center">
-          <Logo size="md" />
-          <Text
-            className="ml-2 text-xl font-rubik-bold"
-            style={{ color: colors.text }}
-          >
-            {clientName}
-          </Text>
-        </View>
-
-        <Avatar imageUrl={photoURL || undefined} size="md" />
-      </View>
+      <HomeHeader
+  avatarImageUrl={photoURL || undefined}
+  avatarName={user?.displayName || undefined}
+  avatarEmail={user?.email || undefined}
+/>
 
       {/* Content */}
       <View className="px-6 mt-6">
