@@ -19,7 +19,6 @@ const AppStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Tabs" component={BottomTabsNavigations} />
-      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="AppInfo" component={AppInfoScreen} />
       <Stack.Screen name="MyProfile" component={ProfileScreen} />
     </Stack.Navigator>

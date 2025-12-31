@@ -1,5 +1,7 @@
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { store } from '../store/store';
+import { setSigningUp } from '../store/slices/authSlice';
 
 export const configureGoogleSignIn = () => {
   GoogleSignin.configure({ 
@@ -12,6 +14,7 @@ export const configureGoogleSignIn = () => {
 
 export const signInWithGoogle = async () => {
   try {
+    store.dispatch(setSigningUp(false));
     // Check if Google Play Services are available (Android only)
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     

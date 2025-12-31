@@ -7,13 +7,13 @@ import Loader from '../components/ui/Loader';
 import SplashScreen from '../screens/SplashScreen';
 
 const Navigation: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isSigningUp   } = useAuth();
 
   if (isLoading) {
     return <SplashScreen />;
   }
 
-  return isAuthenticated ? <AppStackNavigator /> : <AuthNavigator />;
+  return isAuthenticated && !isSigningUp ? <AppStackNavigator /> : <AuthNavigator />;
 };
 
 export default Navigation;

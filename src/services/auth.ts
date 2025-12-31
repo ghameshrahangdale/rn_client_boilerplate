@@ -2,7 +2,7 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { store } from '../store/store';
-import { setUser, setLoading, setError, logout } from '../store/slices/authSlice';
+import { setUser, setLoading, setError, logout, setSigningUp } from '../store/slices/authSlice';
 
 // User type matching Firebase user structure
 export interface User {
@@ -28,6 +28,8 @@ export const AuthService = {
   // Email/Password Login
   async loginWithEmail(email: string, password: string): Promise<void> {
     try {
+    store.dispatch(setSigningUp(false));
+
       // store.dispatch(setLoading(true));
       // store.dispatch(setError(null));
       
@@ -51,15 +53,14 @@ async signupWithEmail(
 ): Promise<void> {
   try {
    
-
+    store.dispatch(setSigningUp(true));
     const userCredential = await auth().createUserWithEmailAndPassword(email, password);
 
-   
+    console.log(userCredential);
+
     await userCredential.user.updateProfile({
       displayName: displayName,
     });
-
- 
     await auth().signOut();
     
     return; 

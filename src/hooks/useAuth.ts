@@ -7,7 +7,7 @@ import { RootState } from '../store/store';
 
 export const useAuth = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated, isLoading, isSigningUp, error } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     // Listen to auth state changes
@@ -38,6 +38,7 @@ export const useAuth = () => {
     user,
     isAuthenticated,
     isLoading,
+    isSigningUp,
     error,
   };
 };

@@ -10,7 +10,7 @@ import {
 import { AuthService } from '../services/auth';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
 import Toast from 'react-native-toast-message';
@@ -143,15 +143,15 @@ const SignupScreen: React.FC = () => {
     setIsLoading(true);
     
     try {
-      await AuthService.signupWithEmail(email, password, displayName);
-
+      const res = await AuthService.signupWithEmail(email, password, displayName);
       Toast.show({
         type: 'success',
         text1: 'Account created',
         text2: 'Please login to continue',
       });
 
-      navigation.replace('Login');
+      navigation.navigate('Login');
+    
     } catch (err: any) {
       const message = err?.message || 'Signup failed';
       setSignupError(message);

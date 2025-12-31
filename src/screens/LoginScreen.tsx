@@ -10,7 +10,7 @@ import {
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { useTheme } from '../context/ThemeContext';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { configureGoogleSignIn, signInWithGoogle } from '../services/googleSignIn';
@@ -69,13 +69,11 @@ const LoginScreen: React.FC = () => {
     if (!validateForm()) return;
     
     try {
+      
       setEmailLoading(true);
       setError('');
 
       await AuthService.loginWithEmail(email, password);
-
-
-      
       // If login is successful, show success message
       Toast.show({
         type: 'success',
@@ -83,15 +81,6 @@ const LoginScreen: React.FC = () => {
         text2: 'Welcome back 👋',
         
       });
-
-      navigation.dispatch(
-    CommonActions.reset({
-      index: 0,
-      routes: [
-        { name: 'Tabs' }, // This should be your AppStack containing Tabs
-      ],
-    })
-  );
     } catch (error: any) {
       console.log(error);
       
