@@ -1,29 +1,29 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import Logo from '../common/Logo';
 
 const shadow = {
   shadowColor: '#000',
-  shadowOffset: { width: 0, height: 6 },
-  shadowOpacity: 0.12,
-  shadowRadius: 10,
-  elevation: 10,
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.1,
+  shadowRadius: 6,
+  elevation: 8,
 };
 
 export const toastConfig = {
   success: ({ text1, text2 }: any) => (
     <View
       style={[shadow]}
-      className="w-[90%] bg-white rounded-2xl px-4 py-3 flex-row items-center"
+      className="w-[90%] bg-white rounded-xl px-3 py-2 flex-row items-center"
     >
       <Logo size="sm" />
-      <View className="ml-3 flex-1">
-        <Text className="text-green-600 font-rubik text-base">
+      <View className="ml-2 flex-1">
+        <Text className="text-green-600 font-rubik-semibold text-sm">
           {text1}
         </Text>
         {text2 ? (
-          <Text className="text-gray-600 font-rubik text-sm mt-0.5">
+          <Text className="text-gray-600 font-rubik text-xs mt-0.5" numberOfLines={2}>
             {text2}
           </Text>
         ) : null}
@@ -34,15 +34,15 @@ export const toastConfig = {
   error: ({ text1, text2 }: any) => (
     <View
       style={[shadow]}
-      className="w-[90%] bg-white rounded-2xl px-4 py-3 flex-row items-center"
+      className="w-[90%] bg-white rounded-xl px-3 py-2 flex-row items-center"
     >
       <Logo size="sm" />
-      <View className="ml-3 flex-1">
-        <Text className="text-red-600 font-rubik-semibold text-base">
+      <View className="ml-2 flex-1">
+        <Text className="text-red-600 font-rubik-semibold text-sm">
           {text1}
         </Text>
         {text2 ? (
-          <Text className="text-gray-600 font-rubik text-sm mt-0.5">
+          <Text className="text-gray-600 font-rubik text-xs mt-0.5" numberOfLines={2}>
             {text2}
           </Text>
         ) : null}
@@ -53,15 +53,15 @@ export const toastConfig = {
   info: ({ text1, text2 }: any) => (
     <View
       style={[shadow]}
-      className="w-[90%] bg-white rounded-2xl px-4 py-3 flex-row items-center"
+      className="w-[90%] bg-white rounded-xl px-3 py-2 flex-row items-center"
     >
       <Logo size="sm" />
-      <View className="ml-3 flex-1">
-        <Text className="text-blue-600 font-rubik-semibold text-base">
+      <View className="ml-2 flex-1">
+        <Text className="text-blue-600 font-rubik-semibold text-sm">
           {text1}
         </Text>
         {text2 ? (
-          <Text className="text-gray-600 font-rubik text-sm mt-0.5">
+          <Text className="text-gray-600 font-rubik text-xs mt-0.5" numberOfLines={2}>
             {text2}
           </Text>
         ) : null}
