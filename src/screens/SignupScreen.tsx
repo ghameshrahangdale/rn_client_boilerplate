@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -32,15 +32,103 @@ const SignupScreen: React.FC = () => {
 
   const navigation = useNavigation<SignupScreenNavigationProp>();
 
+  // Immediate email validation
+  useEffect(() => {
+    if (email.length === 0) {
+      setErrors(prev => ({ ...prev, email: '' }));
+      return;
+    }
+
+    if (!email.includes('@')) {
+      setErrors(prev => ({ 
+        ...prev, 
+        email: 'Please include "@" in your email address' 
+      }));
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setErrors(prev => ({ 
+        ...prev, 
+        email: 'Please enter a valid email address (e.g., name@example.com)' 
+      }));
+    } else {
+      setErrors(prev => ({ ...prev, email: '' }));
+    }
+  }, [email]);
+
+  // Immediate password validation
+  useEffect(() => {
+    if (password.length === 0) {
+      setErrors(prev => ({ ...prev, password: '' }));
+      return;
+    }
+
+    const missingRequirements: string[] = [];
+
+    if (password.length < 6) {
+      missingRequirements.push('6 characters');
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      missingRequirements.push('one uppercase letter');
+    }
+
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      missingRequirements.push('one special character (!@#$% etc.)');
+    }
+
+    if (missingRequirements.length > 0) {
+      setErrors(prev => ({ 
+        ...prev, 
+        password: `Must include: ${missingRequirements.join(', ')}` 
+      }));
+    } else {
+      setErrors(prev => ({ ...prev, password: '' }));
+    }
+  }, [password]);
+
+  // Immediate confirm password validation
+  useEffect(() => {
+    if (confirmPassword.length === 0) {
+      setErrors(prev => ({ ...prev, confirmPassword: '' }));
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrors(prev => ({ 
+        ...prev, 
+        confirmPassword: 'Passwords do not match. Please try again.' 
+      }));
+    } else {
+      setErrors(prev => ({ ...prev, confirmPassword: '' }));
+    }
+  }, [password, confirmPassword]);
+
   const validateForm = () => {
     const e: any = {};
-    if (!displayName.trim()) e.displayName = 'Name required';
-    if (!email) e.email = 'Email required';
-    else if (!/\S+@\S+\.\S+/.test(email)) e.email = 'Invalid email';
-    if (!password) e.password = 'Password required';
-    else if (password.length < 6) e.password = 'Min 6 characters';
-    if (password !== confirmPassword)
+    
+    if (!displayName.trim()) {
+      e.displayName = 'Please enter your name';
+    }
+    
+    if (!email) {
+      e.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      e.email = 'Please enter a valid email address';
+    }
+    
+    if (!password) {
+      e.password = 'Password is required';
+    } else if (password.length < 6 || !/[A-Z]/.test(password) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      // Use the same validation logic but with a cleaner message for final validation
+      const missing = [];
+      if (password.length < 6) missing.push('6 characters');
+      if (!/[A-Z]/.test(password)) missing.push('one uppercase letter');
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) missing.push('one special character');
+      e.password = `Password must include: ${missing.join(', ')}`;
+    }
+    
+    if (password !== confirmPassword) {
       e.confirmPassword = 'Passwords do not match';
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;

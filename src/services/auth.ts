@@ -67,10 +67,6 @@ async signupWithEmail(
     const errorCode = error?.code || error?.message || 'unknown-error';
     const errorMessage = this.getErrorMessage(errorCode);
     
-    // ✅ Don't dispatch to Redux to prevent app reset
-    // store.dispatch(setError(errorMessage)); // Remove this
-    // store.dispatch(setLoading(false)); // Remove this
-    
     throw new Error(errorMessage);
   }
 },
