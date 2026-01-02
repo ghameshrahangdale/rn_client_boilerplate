@@ -105,11 +105,13 @@ const MenuScreen: React.FC = () => {
               key={index}
               icon={item.icon}
               label={item.label}
+              subtitle={item.subtitle}
               color={colors.primary}
               onPress={() => handleMenuPress(item)}
             />
           ))}
         </View>
+
 
         {/* Logout */}
         <View className="bg-white mx-4 mt-6 rounded-2xl shadow-sm">
@@ -143,11 +145,13 @@ const MenuScreen: React.FC = () => {
 const MenuItem = ({
   icon,
   label,
+  subtitle,
   onPress,
   color,
 }: {
   icon: string;
   label: string;
+  subtitle?: string;
   onPress?: () => void;
   color: string;
 }) => (
@@ -156,11 +160,26 @@ const MenuItem = ({
     className="flex-row items-center px-5 py-4 border-b border-gray-200 last:border-b-0"
   >
     <Feather name={icon as any} size={20} color={color} />
-    <Text className="ml-4 text-gray-800 font-rubik flex-1">
-      {label}
-    </Text>
-    <Feather name="chevron-right" size={18} color="#9CA3AF" />
+
+    <View className="ml-4 flex-1">
+      <Text className="text-gray-800 font-rubik">
+        {label}
+      </Text>
+
+      {subtitle ? (
+        <Text className="text-xs text-gray-500 font-rubik mt-0.5">
+          {subtitle}
+        </Text>
+      ) : null}
+    </View>
+
+    <Feather
+      name="chevron-right"
+      size={18}
+      color="#9CA3AF"
+    />
   </TouchableOpacity>
 );
+
 
 export default MenuScreen;
