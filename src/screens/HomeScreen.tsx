@@ -1,155 +1,247 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useMemo } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+
 import { RootState } from '../store/store';
 import { useTheme } from '../context/ThemeContext';
-import Button from '../components/ui/Button';
-import Feather from 'react-native-vector-icons/Feather';
-import { name as clientName } from '../../app.json';
-import Logo from '../components/common/Logo';
-import Avatar from '../components/ui/Avatar';
-import { AuthService } from '../services/auth';
 import HomeHeader from '../components/ui/HomeHeader';
 
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
-  const [photoURL] = useState(user?.photoURL || '');
+  const navigation = useNavigation<any>();
+
+  const firstName = useMemo(
+    () => user?.displayName?.split(' ')[0],
+    [user?.displayName]
+  );
 
   const surface = '#FFFFFF';
   const textSecondary = '#6B7280';
 
-  const firstName = user?.displayName?.split(' ')[0];
-
- 
-
   return (
     <ScrollView
-      contentContainerStyle={{ paddingBottom: 32 }}
       className="flex-1 bg-gray-50"
+      contentContainerStyle={{ paddingBottom: 32 }}
     >
+      {/* Header */}
       <HomeHeader
-  avatarImageUrl={photoURL || undefined}
-  avatarName={user?.displayName || undefined}
-  avatarEmail={user?.email || undefined}
-/>
+        avatarImageUrl={user?.photoURL || undefined}
+        avatarName={user?.displayName || undefined}
+        avatarEmail={user?.email || undefined}
+      />
 
-      {/* Content */}
       <View className="px-6 mt-6">
-        {/* Welcome */}
-        <View className="mb-8">
+        {/* Greeting */}
+        <View className="mb-6">
           <Text
             className="text-2xl font-rubik-bold"
             style={{ color: colors.text }}
           >
-            Welcome{firstName ? `, ${firstName}` : ''} 👋
+            Hello{firstName ? `, ${firstName}` : ''} 👋
           </Text>
           <Text
             className="mt-1 font-rubik"
             style={{ color: textSecondary }}
           >
-            {user?.email}
+            Manage your account and explore features
           </Text>
         </View>
 
-        {/* Highlight Card */}
+        {/* Primary Card */}
         <View
-          className="rounded-2xl p-6 mb-8"
-          style={{
-            backgroundColor: colors.primary + '12',
-          }}
+          className="rounded-3xl p-6 mb-8"
+          style={{ backgroundColor: colors.primary }}
         >
-          <Text
-            className="text-lg font-rubik-bold mb-2"
-            style={{ color: colors.primary }}
-          >
-            🚀 App Setup Complete
+          <Text className="text-white text-lg font-rubik-bold mb-2">
+            Your account is active
           </Text>
-          <Text
-            className="font-rubik leading-relaxed"
-            style={{ color: colors.text }}
-          >
-            This boilerplate is production-ready with authentication,
-            profile management, and a scalable architecture. You can now
-            focus entirely on business features.
+          <Text className="text-white/90 font-rubik leading-relaxed mb-5">
+            Access all features, manage your profile, and customize your
+            experience from one place.
           </Text>
+
+          <TouchableOpacity
+            className="self-start px-5 py-2.5 rounded-full"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
+            <Text
+              className="font-rubik-bold"
+              style={{ color: colors.primary }}
+            >
+              Get Started →
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Core Modules */}
+        {/* Quick Actions */}
         <View className="mb-8">
           <Text
             className="text-lg font-rubik-bold mb-4"
             style={{ color: colors.text }}
           >
-            Core Modules
+            Quick Actions
           </Text>
 
-          <View className="flex-row flex-wrap justify-between">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 4,
+              paddingBottom: 12,
+            }}
+            style={{ overflow: 'visible' }}
+          >
             {[
-              { icon: 'shield', title: 'Secure Auth' },
-              { icon: 'user', title: 'User Profile' },
-              { icon: 'settings', title: 'Config Ready' },
-              { icon: 'layers', title: 'Scalable Base' },
-            ].map((item, index) => (
-              <View
-                key={index}
-                className="w-[48%] rounded-xl p-4 mb-4"
-                style={{
-                  backgroundColor: surface,
-                  shadowColor: '#000',
-                  shadowOpacity: 0.05,
-                  shadowRadius: 8,
-                  elevation: 2,
-                }}
-              >
-                <Feather
-                  name={item.icon as any}
-                  size={22}
-                  color={colors.primary}
-                />
-                <Text
-                  className="mt-3 font-rubik-bold"
-                  style={{ color: colors.text }}
+              {
+                icon: 'edit',
+                title: 'Complete Profile',
+                subtitle: 'Finish setting up your account',
+                action: () => navigation.navigate('MyProfile'),
+              },
+              {
+                icon: 'shield',
+                title: 'Enable Protection',
+                subtitle: 'Add extra security to your login',
+              },
+              {
+                icon: 'bell',
+                title: 'Notifications',
+                subtitle: 'Control alerts and updates',
+              },
+            ].map((item, index) => {
+              const Card = item.action ? TouchableOpacity : View;
+
+              return (
+                <Card
+                  key={index}
+                  onPress={item.action}
+                  activeOpacity={0.85}
+                  className="mr-4 rounded-2xl p-5 w-64"
+                  style={{
+                    backgroundColor: surface,
+                    elevation: 2,
+                    shadowColor: '#000',
+                    shadowOpacity: 0.08,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 4 },
+                  }}
                 >
-                  {item.title}
-                </Text>
-                <Text
-                  className="text-sm mt-1 font-rubik"
-                  style={{ color: textSecondary }}
-                >
-                  Ready to extend
-                </Text>
-              </View>
-            ))}
-          </View>
+                  <View
+                    className="w-10 h-10 rounded-full items-center justify-center mb-3"
+                    style={{ backgroundColor: colors.primary + '15' }}
+                  >
+                    <Feather
+                      name={item.icon as any}
+                      size={20}
+                      color={colors.primary}
+                    />
+                  </View>
+
+                  <Text
+                    className="font-rubik-bold mb-1"
+                    style={{ color: colors.text }}
+                  >
+                    {item.title}
+                  </Text>
+
+                  <Text
+                    className="text-sm font-rubik"
+                    style={{ color: textSecondary }}
+                  >
+                    {item.subtitle}
+                  </Text>
+                </Card>
+              );
+            })}
+          </ScrollView>
         </View>
 
-        {/* Account Status */}
-        <View
-          className="rounded-2xl p-6 mb-8"
-          style={{ backgroundColor: surface }}
-        >
+        {/* Features */}
+        <View className="mb-8">
           <Text
             className="text-lg font-rubik-bold mb-4"
             style={{ color: colors.text }}
           >
-            Account Status
+            Features
           </Text>
 
-          <View className="flex-row items-center">
-            <View
-              className="w-2.5 h-2.5 rounded-full mr-2"
-              style={{ backgroundColor: colors.success }}
-            />
-            <Text
-              className="font-rubik-medium"
-              style={{ color: colors.success }}
-            >
-              Active
-            </Text>
+          <View className="flex-row flex-wrap justify-between">
+            {[
+              {
+                icon: 'user',
+                title: 'Profile',
+                description: 'View and update your personal information',
+                action: () => navigation.navigate('MyProfile'),
+              },
+              {
+                icon: 'lock',
+                title: 'Authentication',
+                description:
+                  'Manage login methods, passwords, and security options',
+              },
+              {
+                icon: 'settings',
+                title: 'Settings',
+                description:
+                  'Customize preferences, themes, and app behavior',
+              },
+              {
+                icon: 'help-circle',
+                title: 'Support',
+                description:
+                  'Get help, contact support, or browse FAQs',
+              },
+            ].map((item, index) => {
+              const Card = item.action ? TouchableOpacity : View;
+
+              return (
+                <Card
+                  key={index}
+                  onPress={item.action}
+                  activeOpacity={0.85}
+                  className="w-[48%] rounded-2xl p-5 mb-4"
+                  style={{
+                    backgroundColor: surface,
+                    elevation: 2,
+                  }}
+                >
+                  <View
+                    className="w-10 h-10 rounded-full items-center justify-center mb-3"
+                    style={{ backgroundColor: colors.primary + '15' }}
+                  >
+                    <Feather
+                      name={item.icon as any}
+                      size={20}
+                      color={colors.primary}
+                    />
+                  </View>
+
+                  <Text
+                    className="font-rubik-bold"
+                    style={{ color: colors.text }}
+                  >
+                    {item.title}
+                  </Text>
+
+                  <Text
+                    className="text-sm mt-1 font-rubik leading-relaxed"
+                    style={{ color: textSecondary }}
+                  >
+                    {item.description}
+                  </Text>
+                </Card>
+              );
+            })}
           </View>
         </View>
-
       </View>
     </ScrollView>
   );

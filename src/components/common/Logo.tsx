@@ -43,7 +43,7 @@ const Logo: React.FC<LogoProps> = ({
       {source ? (
         <Image
           source={source}
-          style={{ width: dimension, height: dimension }}
+          style={{ width: dimension, height: dimension, borderRadius: dimension / 8 }}
           resizeMode="contain"
         />
       ) : (

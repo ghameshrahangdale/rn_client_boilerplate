@@ -12,10 +12,10 @@ export const TAB_CONFIG = [
     icon: 'user',
     label: 'Account',
   },
-  // {
-  //   name: 'Settings',
-  //   component: 'MenuScreen',
-  //   icon: 'settings',
-  //   label: 'Settings',
-  // },
+  {
+    name: 'Settings',
+    component: 'SettingsScreen',
+    icon: 'settings',
+    label: 'Settings',
+  },
 ] as const;

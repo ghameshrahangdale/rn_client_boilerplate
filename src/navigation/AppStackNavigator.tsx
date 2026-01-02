@@ -4,6 +4,7 @@ import BottomTabsNavigations from './BottomTabsNavigations';
 import AppInfoScreen from '../screens/AppInfoScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/LoginScreen';
+import HelpSupportScreen from '../screens/HelpSupportScreen';
 
 export type AppStackParamList = {
   Tabs: undefined;
@@ -11,6 +12,7 @@ export type AppStackParamList = {
   AppInfo: undefined;
   MyProfile: undefined;
   Login:undefined;
+  Support: undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamList>();
@@ -21,6 +23,7 @@ const AppStackNavigator: React.FC = () => {
       <Stack.Screen name="Tabs" component={BottomTabsNavigations} />
       <Stack.Screen name="AppInfo" component={AppInfoScreen} />
       <Stack.Screen name="MyProfile" component={ProfileScreen} />
+      <Stack.Screen name="Support" component={HelpSupportScreen} />
     </Stack.Navigator>
   );
 };

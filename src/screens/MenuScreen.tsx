@@ -120,7 +120,8 @@ const MenuScreen: React.FC = () => {
             icon="help-circle"
             label="Help & Support"
             color={colors.primary}
-
+            // onPress={() => navigation.navigate('Support' as never)}
+            
           />
         </View>
 

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../context/ThemeContext';
 import { TAB_CONFIG } from '../config/tabs.config';
-import { SCREEN_MAP } from '../screens/screenMap';
+import { SCREEN_MAP } from '../config/screenMap';
 
 export type AppTabParamList = {
   Home: undefined;
