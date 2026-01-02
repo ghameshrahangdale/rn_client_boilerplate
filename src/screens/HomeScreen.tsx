@@ -13,6 +13,9 @@ import { RootState } from '../store/store';
 import { useTheme } from '../context/ThemeContext';
 import HomeHeader from '../components/ui/HomeHeader';
 
+import { QUICK_ACTIONS } from '../config/home.quickActions';
+import { FEATURES } from '../config/home.features';
+
 const HomeScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
@@ -99,30 +102,15 @@ const HomeScreen: React.FC = () => {
             }}
             style={{ overflow: 'visible' }}
           >
-            {[
-              {
-                icon: 'edit',
-                title: 'Complete Profile',
-                subtitle: 'Finish setting up your account',
-                action: () => navigation.navigate('MyProfile'),
-              },
-              {
-                icon: 'shield',
-                title: 'Enable Protection',
-                subtitle: 'Add extra security to your login',
-              },
-              {
-                icon: 'bell',
-                title: 'Notifications',
-                subtitle: 'Control alerts and updates',
-              },
-            ].map((item, index) => {
-              const Card = item.action ? TouchableOpacity : View;
+            {QUICK_ACTIONS.map((item, index) => {
+              const Card = item.route ? TouchableOpacity : View;
 
               return (
                 <Card
                   key={index}
-                  onPress={item.action}
+                  onPress={() =>
+                    item.route && navigation.navigate(item.route)
+                  }
                   activeOpacity={0.85}
                   className="mr-4 rounded-2xl p-5 w-64"
                   style={{
@@ -174,38 +162,15 @@ const HomeScreen: React.FC = () => {
           </Text>
 
           <View className="flex-row flex-wrap justify-between">
-            {[
-              {
-                icon: 'user',
-                title: 'Profile',
-                description: 'View and update your personal information',
-                action: () => navigation.navigate('MyProfile'),
-              },
-              {
-                icon: 'lock',
-                title: 'Authentication',
-                description:
-                  'Manage login methods, passwords, and security options',
-              },
-              {
-                icon: 'settings',
-                title: 'Settings',
-                description:
-                  'Customize preferences, themes, and app behavior',
-              },
-              {
-                icon: 'help-circle',
-                title: 'Support',
-                description:
-                  'Get help, contact support, or browse FAQs',
-              },
-            ].map((item, index) => {
-              const Card = item.action ? TouchableOpacity : View;
+            {FEATURES.map((item, index) => {
+              const Card = item.route ? TouchableOpacity : View;
 
               return (
                 <Card
                   key={index}
-                  onPress={item.action}
+                  onPress={() =>
+                    item.route && navigation.navigate(item.route)
+                  }
                   activeOpacity={0.85}
                   className="w-[48%] rounded-2xl p-5 mb-4"
                   style={{
