@@ -29,7 +29,7 @@ const ask = (q) => new Promise((res) => rl.question(q, res));
   console.log('✅ app.json updated');
 
   // 2️⃣ Rename Android package
-  const oldPackage = 'com.rn_client_boilerplate';
+  const oldPackage = 'com.rnignite';
   const newPackagePath = packageName.replace(/\./g, '/');
 
   const androidSrc = path.join(
@@ -37,7 +37,7 @@ const ask = (q) => new Promise((res) => rl.question(q, res));
     'android/app/src/main/java'
   );
 
-  const oldPath = path.join(androidSrc, 'com/rn_client_boilerplate');
+  const oldPath = path.join(androidSrc, 'com/rnignite');
   const newPath = path.join(androidSrc, newPackagePath);
 
   fs.mkdirSync(path.dirname(newPath), { recursive: true });
@@ -56,7 +56,7 @@ const ask = (q) => new Promise((res) => rl.question(q, res));
     const content = fs.readFileSync(file, 'utf8');
     fs.writeFileSync(
       file,
-      content.replace(/com\.rn_client_boilerplate/g, packageName)
+      content.replace(/com\.rnignite/g, packageName)
     );
   };
 
@@ -88,5 +88,5 @@ const ask = (q) => new Promise((res) => rl.question(q, res));
 
   fs.writeFileSync(stringsXml, xml);
 
-  console.log('🎉 Setup complete! Run npx react-native run-android');
+  console.log('🎉 Setup complete! Run npm run android --reset-cache');
 })();

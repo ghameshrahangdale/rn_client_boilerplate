@@ -1,4 +1,4 @@
-package com.rn_client_boilerplate
+package com.rnignite
 
 import android.app.Application
 import com.facebook.react.PackageList

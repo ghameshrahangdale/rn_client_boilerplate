@@ -24,12 +24,29 @@ const Header: React.FC<HeaderProps> = ({
   avatarSize = 'md',
   style,
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { colors } = useTheme();
+
+  const handleAvatarPress = () => {
+    navigation.navigate('Tabs', {
+      screen: 'Account',
+    });
+  };
 
   return (
     <View
-      style={[{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#fff', justifyContent: 'space-between', elevation: 1 }, style]}
+      style={[
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          backgroundColor: '#fff',
+          justifyContent: 'space-between',
+          elevation: 1,
+        },
+        style,
+      ]}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {showBack && (
@@ -37,19 +54,28 @@ const Header: React.FC<HeaderProps> = ({
             <Feather name="arrow-left" size={22} color={colors.text} />
           </TouchableOpacity>
         )}
-        <Text style={{ marginLeft: showBack ? 12 : 0, fontSize: 16, fontFamily: 'Rubik-Medium', color: colors.text }}>
+        <Text
+          style={{
+            marginLeft: showBack ? 12 : 0,
+            fontSize: 16,
+            fontFamily: 'Rubik-Medium',
+            color: colors.text,
+          }}
+        >
           {title}
         </Text>
       </View>
 
-      {avatarName || avatarEmail || avatarImageUrl ? (
-        <Avatar
-          name={avatarName}
-          email={avatarEmail}
-          imageUrl={avatarImageUrl || undefined}
-          size={avatarSize as any}
-        />
-      ) : null}
+      {(avatarName || avatarEmail || avatarImageUrl) && (
+        <TouchableOpacity onPress={handleAvatarPress} activeOpacity={0.7}>
+          <Avatar
+            name={avatarName}
+            email={avatarEmail}
+            imageUrl={avatarImageUrl || undefined}
+            size={avatarSize as any}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleProp, ViewStyle } from 'react-native';
+import {
+  View,
+  Text,
+  StyleProp,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import Avatar from './Avatar';
 import Logo from '../common/Logo';
@@ -21,6 +28,13 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
   style,
 }) => {
   const { colors } = useTheme();
+  const navigation = useNavigation<any>();
+
+  const handleAvatarPress = () => {
+    navigation.navigate('Tabs', {
+      screen: 'Account',
+    });
+  };
 
   return (
     <View
@@ -29,8 +43,8 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          paddingHorizontal: 24,
-          paddingVertical: 16,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
           backgroundColor: '#fff',
           elevation: 1,
         },
@@ -43,8 +57,8 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
         <Text
           style={{
             marginLeft: 8,
-            fontSize: 18,
-            fontFamily: 'Rubik-Bold',
+            fontSize: 16, // ✅ match Header title size
+            fontFamily: 'Rubik-Medium',
             color: colors.text,
           }}
         >
@@ -53,14 +67,16 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
       </View>
 
       {/* Right: Avatar */}
-      {avatarName || avatarEmail || avatarImageUrl ? (
-        <Avatar
-          name={avatarName}
-          email={avatarEmail}
-          imageUrl={avatarImageUrl || undefined}
-          size={avatarSize as any}
-        />
-      ) : null}
+      {(avatarName || avatarEmail || avatarImageUrl) && (
+        <TouchableOpacity onPress={handleAvatarPress} activeOpacity={0.7}>
+          <Avatar
+            name={avatarName}
+            email={avatarEmail}
+            imageUrl={avatarImageUrl || undefined}
+            size={avatarSize as any} // md by default → same height
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

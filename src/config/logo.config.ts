@@ -1,3 +1,3 @@
 export const Images = {
-  logo: require('../../assets/images/logo.jpg'),
+  logo: require('../../assets/images/rnignite_logo.png'),
 };

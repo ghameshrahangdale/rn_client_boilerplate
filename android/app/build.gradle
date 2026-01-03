@@ -79,9 +79,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.rn_client_boilerplate"
+    namespace "com.rnignite"
     defaultConfig {
-        applicationId "com.rn_client_boilerplate"
+        applicationId "com.rnignite"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

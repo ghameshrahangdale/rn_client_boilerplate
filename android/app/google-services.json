@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:533489391926:android:dd4d1377df972aa1863b97",
+        "android_client_info": {
+          "package_name": "com.alishan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533489391926-ujodcfssqbkfrj45ircuvetvgcuvq9s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alishan",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMiP_2eCVdApRmLhnvZykQlFNU7W7lMQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:533489391926:android:60f7fa438107caf7863b97",
         "android_client_info": {
           "package_name": "com.rn_client_boilerplate"
@@ -21,6 +58,35 @@
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
+        {
+          "client_id": "533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMiP_2eCVdApRmLhnvZykQlFNU7W7lMQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533489391926:android:d50f2ea1c3487691863b97",
+        "android_client_info": {
+          "package_name": "com.rnignite"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "533489391926-07aqn2mdo5ngs0bgtiilb0thd48hke5b.apps.googleusercontent.com",
           "client_type": 3

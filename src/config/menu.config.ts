@@ -15,9 +15,15 @@ export const MENU_ITEMS: MenuItemConfig[] = [
   },
   {
     icon: 'info',
-    label: 'App Info',
-    subtitle: 'Version, build and application details',
+    label: 'Legal & App Info',
+    subtitle: 'Privacy Policy, Terms & Conditions, Version details',
     route: 'AppInfo',
+  },
+  {
+    icon: 'info', // or 'book-open'
+    label: 'About Us',
+    subtitle: 'Learn more about RNIgnite',
+    route: 'AboutUs',
   },
   {
     icon: 'share-2',
@@ -29,6 +35,6 @@ export const MENU_ITEMS: MenuItemConfig[] = [
     icon: 'help-circle',
     label: 'Help & Support',
     subtitle: 'Get help or contact support',
-    // route: 'Support',
+    route: 'Support',
   },
 ];

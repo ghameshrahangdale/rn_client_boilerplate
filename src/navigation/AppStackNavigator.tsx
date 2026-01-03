@@ -5,6 +5,10 @@ import AppInfoScreen from '../screens/AppInfoScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HelpSupportScreen from '../screens/HelpSupportScreen';
+import AboutUsScreen from '../screens/AboutUsScreen';
+import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
+import TermsScreen from '../screens/TermsScreen';
+import DocumentationScreen from '../screens/DocumentationScreen';
 
 export type AppStackParamList = {
   Tabs: undefined;
@@ -13,6 +17,10 @@ export type AppStackParamList = {
   MyProfile: undefined;
   Login:undefined;
   Support: undefined;
+  AboutUs: undefined;
+  PrivacyPolicy: undefined;
+  Terms: undefined;
+  Documentation: undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamList>();
@@ -24,6 +32,10 @@ const AppStackNavigator: React.FC = () => {
       <Stack.Screen name="AppInfo" component={AppInfoScreen} />
       <Stack.Screen name="MyProfile" component={ProfileScreen} />
       <Stack.Screen name="Support" component={HelpSupportScreen} />
+      <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="Documentation" component={DocumentationScreen} />
     </Stack.Navigator>
   );
 };
