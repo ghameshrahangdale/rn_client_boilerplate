@@ -7,5 +7,5 @@ export const theme: ThemeColors = {
   text: '#000000',
   error: '#DC2626',
   success: '#059669',
-  warning: '#D97706'
+  warning: '#5c3e1bff'
 };

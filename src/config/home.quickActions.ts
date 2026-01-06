@@ -13,13 +13,27 @@ export const QUICK_ACTIONS: QuickActionConfig[] = [
     route: 'MyProfile',
   },
   {
-    icon: 'shield',
-    title: 'Enable Protection',
-    subtitle: 'Add extra security to your login',
+    icon: 'settings',
+    title: 'Settings',
+    subtitle: 'Manage app preferences',
+    route: 'Settings',
   },
   {
-    icon: 'bell',
-    title: 'Notifications',
-    subtitle: 'Control alerts and updates',
+    icon: 'lock',
+    title: 'Privacy Policy',
+    subtitle: 'Learn how we protect your data',
+    route: 'PrivacyPolicy',
+  },
+  {
+    icon: 'file-text',
+    title: 'Terms & Conditions',
+    subtitle: 'Read our terms of service',
+    route: 'Terms',
+  },
+  {
+    icon: 'help-circle',
+    title: 'Help & Support',
+    subtitle: 'Get help or contact support',
+    route: 'HelpSupport',
   },
 ];
